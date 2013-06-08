@@ -44,7 +44,7 @@ class DoctrineExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('entityManagerConfig'))
 			->setClass('Doctrine\ORM\Configuration')
-			->setFactory('Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration', array($builder->expand('%entities%'), true))
+			->setFactory('Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration', arraY($config['entities']), true)
 			->addSetup('setSQLLogger', array('@doctrine.sqlLogger'))
 			->addSetup('setProxyDir', array('%appDir%/../temp/proxy'))
 			->addSetup('setNamingStrategy', array('@doctrine.mappingStrategy'));
