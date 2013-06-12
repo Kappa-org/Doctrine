@@ -1,40 +1,28 @@
 <?php
 /**
  * Entity.php
+ * 
+ * @author: Ondřej Záruba <zarubaondra@gmail.com>
+ * @data 12.6.13
  *
- * @author Ondřej Záruba <zarubaondra@gmail.com>
- * @date 30.8.12
- *
- * @package Kappa
+ * @package kappa-doctrine
  */
 
 namespace Kappa\Doctrine;
 
-use Nette\Object;
+use Kdyby\Doctrine\Entities\IdentifiedEntity;
 
-/** @MappedSuperClass */
-class Entity extends Object
+/**
+ * Class Entity
+ * @package Kappa\Doctrine
+ */
+abstract class Entity extends IdentifiedEntity
 {
-	/**
-	 * @id
-	 * @column(type="integer")
-	 * @GeneratedValue(strategy="AUTO")
-	 */
-	protected $id;
-
-	/**
-	 * @return int
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
-
 	/**
 	 * @return array
 	 */
-	public function toArray()
+	public function __toArray()
 	{
-		return get_object_vars($this);
+		return array_merge(array('id' => $this->getId()), get_object_vars($this));
 	}
 }
