@@ -1,5 +1,6 @@
 {
 	"name": "kappa/doctrine",
+	"type": "library",
 	"description": "",
 	"keywords": ["framework", "Nette", "Kappa", "database", "Doctrine", "orm"],
 	"homepage": "https://github.com/Kappa-org/Doctrine",
