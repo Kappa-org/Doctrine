@@ -21,9 +21,9 @@
 	"require":{
 		"php": ">= 5.3.0",
 		"doctrine/orm": "2.3.*@stable",
-		"kdyby/events": "dev-master",
-		"kdyby/console": "dev-master",
-		"kdyby/doctrine":"dev-master"
+		"kdyby/events": "@dev",
+		"kdyby/console": "@dev",
+		"kdyby/doctrine":"@dev"
 	},
 
 	"require-dev": {
