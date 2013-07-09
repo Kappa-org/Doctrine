@@ -27,7 +27,6 @@
 	},
 
 	"require-dev": {
-		"nette/tester":"dev-master",
 		"kappa/tester":"dev-master"
 	},
 
