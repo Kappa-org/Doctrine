@@ -23,7 +23,7 @@
 		"kdyby/doctrine": "@dev"
 	},
 	"require-dev": {
-		"kappa/tester": "dev-master"
+		"kappa/tester": "1.0.*"
 	},
 	"autoload": {
 		"psr-0": {
