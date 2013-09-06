@@ -5,6 +5,7 @@
 	"homepage": "https://github.com/Kappa-org/Doctrine",
 	"type": "library",
 	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+	"minimum-stability": "RC",
 	"authors": [
 		{
 			"name": "Ondřej Záruba",
