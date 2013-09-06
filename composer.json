@@ -18,6 +18,7 @@
 	},
 	"require": {
 		"php": ">= 5.3.0",
+		"nette/nette": "@dev",
 		"kdyby/events": "@dev",
 		"kdyby/console": "@dev",
 		"kdyby/doctrine": "@dev"
