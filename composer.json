@@ -1,23 +1,20 @@
 {
 	"name": "kappa/doctrine",
-	"type": "library",
 	"description": "",
 	"keywords": ["framework", "Nette", "Kappa", "database", "Doctrine", "orm"],
 	"homepage": "https://github.com/Kappa-org/Doctrine",
+	"type": "library",
 	"license": "",
-
 	"authors": [
 		{
 			"name": "Ondřej Záruba",
 			"homepage": "http://zaruba-ondrej.cz/"
 		}
 	],
-
 	"support": {
 		"email": "zarubaondra@gmail.com",
 		"issues": "https://github.com/Kappa-org/Doctrine/issues"
 	},
-
 	"require": {
 		"php": ">= 5.3.0",
 		"doctrine/orm": "2.4.*@rc",
@@ -25,16 +22,12 @@
 		"kdyby/console": "@dev",
 		"kdyby/doctrine": "@dev"
 	},
-
 	"require-dev": {
 		"kappa/tester": "dev-master"
 	},
-
 	"autoload": {
 		"psr-0": {
 			"Kappa": "src/"
 		}
 	}
-
-
 }
