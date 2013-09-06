@@ -1,11 +1,11 @@
 <?php
 /**
- * Entity.php
- * 
- * @author: Ondřej Záruba <zarubaondra@gmail.com>
- * @data 12.6.13
+ * This file is part of the Kappa/Doctrine package.
  *
- * @package kappa-doctrine
+ * (c) Ondřej Záruba <zarubaondra@gmail.com>
+ *
+ * For the full copyright and license information, please view the license.md
+ * file that was distributed with this source code.
  */
 
 namespace Kappa\Doctrine;
