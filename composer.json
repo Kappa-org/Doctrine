@@ -4,7 +4,7 @@
 	"keywords": ["framework", "Nette", "Kappa", "database", "Doctrine", "orm"],
 	"homepage": "https://github.com/Kappa-org/Doctrine",
 	"type": "library",
-	"license": "",
+	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
 	"authors": [
 		{
 			"name": "Ondřej Záruba",
