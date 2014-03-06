@@ -10,14 +10,30 @@
 
 namespace Kappa\Doctrine;
 
-use Kdyby\Doctrine\Entities\IdentifiedEntity;
+use Kdyby\Doctrine\Entities\BaseEntity;
 
 /**
  * Class Entity
  * @package Kappa\Doctrine
  */
-abstract class Entity extends IdentifiedEntity
+abstract class Entity extends BaseEntity
 {
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue
+	 * @var int
+	 */
+	private $id;
+
+	/**
+	 * @return int
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
+
 	/**
 	 * @return array
 	 */
