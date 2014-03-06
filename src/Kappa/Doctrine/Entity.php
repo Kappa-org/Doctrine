@@ -11,6 +11,7 @@
 namespace Kappa\Doctrine;
 
 use Kdyby\Doctrine\Entities\BaseEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Entity
