@@ -26,8 +26,8 @@ class DoctrineExtension extends CompilerExtension
 	{
 		$compiler = $this->compiler;
 		$compiler->addExtension('console', new ConsoleExtension());
-    	$compiler->addExtension('events', new EventsExtension());
-    	$compiler->addExtension('annotations', new AnnotationsExtension());
-    	$compiler->addExtension('doctrine', new OrmExtension());
+		$compiler->addExtension('events', new EventsExtension());
+		$compiler->addExtension('annotations', new AnnotationsExtension());
+		$compiler->addExtension('doctrine', new OrmExtension());
 	}
 }
