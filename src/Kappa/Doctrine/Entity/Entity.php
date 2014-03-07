@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Kappa\Doctrine;
+namespace Kappa\Doctrine\Entity;
 
 use Kdyby\Doctrine\Entities\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
