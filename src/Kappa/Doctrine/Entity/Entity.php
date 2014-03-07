@@ -30,17 +30,10 @@ abstract class Entity extends BaseEntity
 
 	/**
 	 * @param array $data
-	 * @throws \Kappa\Doctrine\InvalidPropertyNameException
 	 */
 	public function __construct(array $data = array())
 	{
-		$properties = get_object_vars($this);
-		foreach ($data as $key => $value) {
-			if (!array_key_exists($key, $properties)) {
-				throw new InvalidPropertyNameException("Unknown property '{$key}'");
-			}
-			$this->$key = $value;
-		}
+		$this->fill($data);
 	}
 
 	/**
@@ -57,5 +50,22 @@ abstract class Entity extends BaseEntity
 	public function __toArray()
 	{
 		return array_merge(array('id' => $this->getId()), get_object_vars($this));
+	}
+
+	/**
+	 * @param array $data
+	 * @throws \Kappa\Doctrine\InvalidPropertyNameException
+	 */
+	public function fill(array $data = array())
+	{
+		$properties = get_object_vars($this);
+		foreach ($data as $key => $value) {
+			if (!array_key_exists($key, $properties)) {
+				throw new InvalidPropertyNameException("Unknown property '{$key}'");
+			}
+			$setterName = 'set';
+			$setterName .= ucfirst($key);
+			$this->$setterName($value);
+		}
 	}
 }
