@@ -10,6 +10,7 @@
 
 namespace Kappa\Doctrine\Entity;
 
+use Kappa\Doctrine\InvalidPropertyNameException;
 use Kdyby\Doctrine\Entities\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,6 +27,21 @@ abstract class Entity extends BaseEntity
 	 * @var int
 	 */
 	protected $id;
+
+	/**
+	 * @param array $data
+	 * @throws \Kappa\Doctrine\InvalidPropertyNameException
+	 */
+	public function __construct(array $data = array())
+	{
+		$properties = get_object_vars($this);
+		foreach ($data as $key => $value) {
+			if (!array_key_exists($key, $properties)) {
+				throw new InvalidPropertyNameException("Unknown property '{$key}'");
+			}
+			$this->$key = $value;
+		}
+	}
 
 	/**
 	 * @return int
