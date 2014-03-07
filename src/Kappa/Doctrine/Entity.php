@@ -25,7 +25,7 @@ abstract class Entity extends BaseEntity
 	 * @ORM\GeneratedValue
 	 * @var int
 	 */
-	private $id;
+	protected $id;
 
 	/**
 	 * @return int
