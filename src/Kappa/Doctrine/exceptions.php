@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the kappa-doctrine package.
+ * This file is part of the Kappa\Doctrine package.
  *
  * (c) Ondřej Záruba <zarubaondra@gmail.com>
  *
