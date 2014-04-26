@@ -37,7 +37,12 @@ class DoctrineExtensionTest extends TestCase
 
 	public function testEntityManipulator()
 	{
-		Assert::type('Kappa\Doctrine\Helpers\EntityManipulator', $this->container->getService('doctrine.entityManipulator'));
+		Assert::type('Kappa\Doctrine\Helpers\EntityManipulator', $this->container->getService('kappaDoctrine.entityManipulator'));
+	}
+
+	public function testArrayHydration()
+	{
+		Assert::type('Kappa\Doctrine\Hydrators\ArrayHydrator', $this->container->getService('kappaDoctrine.arrayHydrator'));
 	}
 }
 

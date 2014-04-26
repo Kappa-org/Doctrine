@@ -24,5 +24,8 @@ class DoctrineExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('entityManipulator'))
 			->setClass('Kappa\Doctrine\Helpers\EntityManipulator');
+
+		$builder->addDefinition($this->prefix('arrayHydrator'))
+			->setClass('Kappa\Doctrine\Hydrators\ArrayHydrator');
 	}
 }
