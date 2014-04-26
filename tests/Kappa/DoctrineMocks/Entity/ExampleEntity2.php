@@ -10,14 +10,13 @@
 
 namespace Kappa\Tests\DoctrineMocks\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="tests")
  */
-class ExampleEntity
+class ExampleEntity2
 {
 	/**
 	 * @ORM\Id
@@ -33,25 +32,14 @@ class ExampleEntity
 	protected $name;
 
 	/**
-	 * @ORM\Column(type="string")
+	 * @ORM\ManyToOne(targetEntity="ExampleEntity")
 	 */
-	protected $email;
+	protected $parent;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="ExampleEntity2", mappedBy="parent")
+	 * @ORM\OneToMany(targetEntity="ExampleEntity2)
 	 */
 	protected $entities;
-
-
-	public function __construct()
-	{
-		$this->entities = new ArrayCollection();
-	}
-
-	public function addEntity($e)
-	{
-		$this->entities[] = $e;
-	}
 
 	public function setName($name)
 	{
@@ -60,25 +48,8 @@ class ExampleEntity
 		return $this;
 	}
 
-	public function setEmail($email)
-	{
-		$this->email = $email;
-
-		return $this;
-	}
-
 	public function getName()
 	{
 		return $this->name;
-	}
-
-	public function getEmail()
-	{
-		return $this->email;
-	}
-
-	public function getEntities()
-	{
-		return $this->entities;
 	}
 }
