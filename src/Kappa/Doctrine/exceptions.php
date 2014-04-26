@@ -18,3 +18,12 @@ class InvalidPropertyNameException extends \LogicException
 {
 
 }
+
+/**
+ * Class ReflectionException
+ * @package Kappa\Doctrine
+ */
+class ReflectionException extends \RuntimeException
+{
+
+}
