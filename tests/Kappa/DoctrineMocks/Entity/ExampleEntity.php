@@ -8,17 +8,24 @@
  * file that was distributed with this source code.
  */
 
-namespace Kappa\Doctrine\Tests;
+namespace Kappa\Tests\DoctrineMocks\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Kappa\Doctrine\Entity\Entity;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="tests")
  */
-class ExampleEntity extends Entity
+class ExampleEntity
 {
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue
+	 * @var int
+	 */
+	protected $id;
+
 	/**
 	 * @ORM\Column(type="string")
 	 */
@@ -28,4 +35,28 @@ class ExampleEntity extends Entity
 	 * @ORM\Column(type="string")
 	 */
 	protected $email;
+
+	public function setName($name)
+	{
+		$this->name = $name;
+
+		return $this;
+	}
+
+	public function setEmail($email)
+	{
+		$this->email = $email;
+
+		return $this;
+	}
+
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	public function getEmail()
+	{
+		return $this->email;
+	}
 }
