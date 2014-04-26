@@ -37,6 +37,18 @@ function id($val)
 	return $val;
 }
 
+/**
+ * @return SystemContainer
+ */
+function getContainer()
+{
+	$configurator = new \Nette\Configurator();
+	$configurator->setTempDirectory(__DIR__ . '/../temp');
+	$configurator->addConfig(__DIR__ . '/../data/config.neon');
+
+	return $configurator->createContainer();
+}
+
 function run(Tester\TestCase $testCase)
 {
 	$testCase->run(isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : null);
