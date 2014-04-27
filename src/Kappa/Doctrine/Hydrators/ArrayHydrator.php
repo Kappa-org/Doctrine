@@ -41,10 +41,10 @@ class ArrayHydrator
 	 * @param object $entity
 	 * @param array $ignore
 	 */
-	public function hydrate(&$array, $entity, array $ignore = array())
+	public function hydrate(array &$array, $entity, array $ignore = array())
 	{
-		$columns = $this->getEntityProperties($entity);
-		foreach ($columns as $column) {
+		$properties = $this->getEntityProperties($entity);
+		foreach ($properties as $column) {
 			if (!in_array($column, $ignore)) {
 				try {
 					$array[$column] = $this->entityManipulator->getValue($entity, $column);
