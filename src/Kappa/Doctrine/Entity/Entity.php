@@ -45,14 +45,6 @@ abstract class Entity extends BaseEntity
 	}
 
 	/**
-	 * @return array
-	 */
-	public function __toArray()
-	{
-		return array_merge(array('id' => $this->getId()), get_object_vars($this));
-	}
-
-	/**
 	 * @param array $data
 	 * @throws \Kappa\Doctrine\InvalidPropertyNameException
 	 */
