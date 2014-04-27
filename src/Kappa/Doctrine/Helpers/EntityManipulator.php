@@ -52,13 +52,38 @@ class EntityManipulator
 	}
 
 	/**
+	 * @param object $entity
+	 * @param string $property
+	 * @param mixed $value
+	 * @return mixed
+	 * @throws \Kappa\Doctrine\ReflectionException
+	 */
+	public function addValue($entity, $property, $value)
+	{
+		$method = $this->getMethodName('add', $property);
+		if (!method_exists($entity, $method)) {
+			throw new ReflectionException("Method '{$method}' has not been found");
+		}
+
+		return $entity->$method($value);
+	}
+
+	/**
 	 * @param string $prefix
 	 * @param string $name
 	 * @return string
 	 */
 	private function getMethodName($prefix, $name)
 	{
+		$collection = array('add');
 		$methodName = $prefix;
+		if (in_array($prefix, $collection)) {
+			if (substr($name, -3) == 'ies') {
+				$name = substr($name, 0, strlen($name) - 3) . 'y';
+			} else {
+				$name = substr($name, 0, strlen($name) - 1);
+			}
+		}
 		$methodName .= ucfirst($name);
 
 		return $methodName;

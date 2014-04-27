@@ -15,10 +15,12 @@ namespace Kappa\Tests\Doctrine;
 use Kappa\Doctrine\Helpers\EntityManipulator;
 use Kappa\Tester\TestCase;
 use Kappa\Tests\DoctrineMocks\Entity\ExampleEntity;
+use Kappa\Tests\DoctrineMocks\Entity\ExampleEntity2;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../bootstrap.php';
 require_once __DIR__ . '/../../DoctrineMocks/Entity/ExampleEntity.php';
+require_once __DIR__ . '/../../DoctrineMocks/Entity/ExampleEntity2.php';
 
 /**
  * Class EntityManipulator
@@ -45,6 +47,15 @@ class EntityManipulatorTest extends TestCase
 		Assert::throws(function() use ($entityManipulator, $entity) {
 			$entityManipulator->getValue($entity, 'non-exist');
 		}, 'Kappa\Doctrine\ReflectionException');
+	}
+
+	public function testAdd()
+	{
+		$entityManipulator = new EntityManipulator();
+		$entity = new ExampleEntity();
+		Assert::same(0, count($entity->getEntities()));
+		$entityManipulator->addValue($entity, 'entities', new ExampleEntity2());
+		Assert::same(1, count($entity->getEntities()));
 	}
 }
 
