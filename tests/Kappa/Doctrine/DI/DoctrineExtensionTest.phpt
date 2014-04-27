@@ -44,6 +44,11 @@ class DoctrineExtensionTest extends TestCase
 	{
 		Assert::type('Kappa\Doctrine\Hydrators\ArrayHydrator', $this->container->getService('kappaDoctrine.arrayHydrator'));
 	}
+
+	public function testEntityHydrator()
+	{
+		Assert::type('Kappa\Doctrine\Hydrators\EntityHydrator', $this->container->getService('kappaDoctrine.entityHydrator'));
+	}
 }
 
 \run(new DoctrineExtensionTest(getContainer()));
