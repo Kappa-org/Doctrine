@@ -38,7 +38,7 @@ class EntityHydrator
 
 	/**
 	 * @param object $entity
-	 * @param $array
+	 * @param array $array
 	 */
 	public function hydrate($entity, array $array)
 	{
