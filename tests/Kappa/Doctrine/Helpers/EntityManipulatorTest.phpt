@@ -28,33 +28,49 @@ require_once __DIR__ . '/../../DoctrineMocks/Entity/ExampleEntity2.php';
  */
 class EntityManipulatorTest extends TestCase
 {
-	public function testManipulation()
+	/** @var \Kappa\Doctrine\Helpers\EntityManipulator */
+	private $entityManipulator;
+
+	protected function setUp()
 	{
-		$entityManipulator = new EntityManipulator();
+		$this->entityManipulator = new EntityManipulator();
+	}
+
+	public function testGetValue()
+	{
 		$entity = new ExampleEntity();
 		Assert::null($entity->getName());
 		Assert::null($entity->getEmail());
-		Assert::null($entityManipulator->getValue($entity, 'name'));
-		Assert::null($entityManipulator->getValue($entity, 'email'));
-		Assert::type('Kappa\Tests\DoctrineMocks\Entity\ExampleEntity', $entityManipulator->setValue($entity, 'name', 'Budry'));
-		Assert::type('Kappa\Tests\DoctrineMocks\Entity\ExampleEntity', $entityManipulator->setValue($entity, 'email', 'budry@gmail.com'));
-		Assert::same('Budry', $entityManipulator->getValue($entity, 'name'));
-		Assert::same('budry@gmail.com', $entityManipulator->getValue($entity, 'email'));
+		Assert::null($this->entityManipulator->getValue($entity, 'name'));
+		Assert::null($this->entityManipulator->getValue($entity, 'email'));
+		$entity->setName('Budry');
+		Assert::same('Budry', $this->entityManipulator->getValue($entity, 'name'));
 
-		Assert::throws(function() use ($entityManipulator, $entity) {
-			$entityManipulator->setValue($entity, 'non-exist', 'value');
-		}, 'Kappa\Doctrine\ReflectionException');
-		Assert::throws(function() use ($entityManipulator, $entity) {
-			$entityManipulator->getValue($entity, 'non-exist');
+		$self = $this;
+		Assert::throws(function() use ($self, $entity) {
+			$self->entityManipulator->getValue($entity, 'non-exist');
 		}, 'Kappa\Doctrine\ReflectionException');
 	}
 
-	public function testAdd()
+	public function testSetValue()
 	{
-		$entityManipulator = new EntityManipulator();
+		$entity = new ExampleEntity();
+		Assert::null($entity->getName());
+		Assert::type('Kappa\Tests\DoctrineMocks\Entity\ExampleEntity', $this->entityManipulator->setValue($entity, 'name', 'Budry'));
+		Assert::same('Budry', $entity->getName());
+
+		$self = $this;
+		Assert::throws(function() use ($self, $entity) {
+			$self->entityManipulator->setValue($entity, 'non-exist', 'value');
+		}, 'Kappa\Doctrine\ReflectionException');
+	}
+
+	public function testAddValue()
+	{
+		$this->entityManipulator = new EntityManipulator();
 		$entity = new ExampleEntity();
 		Assert::same(0, count($entity->getEntities()));
-		$entityManipulator->addValue($entity, 'entities', new ExampleEntity2());
+		$this->entityManipulator->addValue($entity, 'entities', new ExampleEntity2());
 		Assert::same(1, count($entity->getEntities()));
 	}
 }
