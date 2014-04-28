@@ -19,8 +19,6 @@ use Kappa\Tests\DoctrineMocks\Entity\ExampleEntity2;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../bootstrap.php';
-require_once __DIR__ . '/../../DoctrineMocks/Entity/ExampleEntity.php';
-require_once __DIR__ . '/../../DoctrineMocks/Entity/ExampleEntity2.php';
 
 /**
  * Class EntityManipulator

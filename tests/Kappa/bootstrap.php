@@ -13,6 +13,9 @@ if (@!include __DIR__ . '/../../vendor/autoload.php') {
 	exit(1);
 }
 
+require __DIR__ . '/DoctrineMocks/Entity/ExampleEntity.php';
+require __DIR__ . '/DoctrineMocks/Entity/ExampleEntity2.php';
+
 // configure environment
 Tester\Environment::setup();
 class_alias('Tester\Assert', 'Assert');
