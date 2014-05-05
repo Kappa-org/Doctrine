@@ -63,12 +63,8 @@ class EntityHydrator
 	private function getEntityProperties($entity)
 	{
 		$entityName = get_class($entity);
-		$mappings = array();
-		$associationMappings = $this->entityManager->getClassMetadata($entityName)->getAssociationMappings();
-		foreach ($associationMappings as $x => $y) {
-			$mappings[] = $x;
-		}
+		$associationMappings = $this->entityManager->getClassMetadata($entityName)->getAssociationNames();
 
-		return $mappings;
+		return $associationMappings;
 	}
 } 
