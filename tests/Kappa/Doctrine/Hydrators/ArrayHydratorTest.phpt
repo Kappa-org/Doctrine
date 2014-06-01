@@ -42,10 +42,10 @@ class ArrayHydratorTest extends TestCase
 		$array = array();
 		Assert::same(0, count($array));
 		$this->arrayHydrator->hydrate($array, $entity);
-		Assert::same(3, count($array));
+		Assert::same(4, count($array));
 		Assert::same($entity->getName(), $array['name']);
 		Assert::same($entity->getEmail(), $array['email']);
-		Assert::type('Doctrine\Common\Collections\ArrayCollection', $array['entities']);
+		Assert::equal(array(new ExampleEntity2()), $array['entities']);
 	}
 
 	public function testIgnore()
@@ -55,7 +55,7 @@ class ArrayHydratorTest extends TestCase
 		$entity->setEmail('budry@example.com');
 		$array = array();
 		$this->arrayHydrator->hydrate($array, $entity, array('email'));
-		Assert::same(2, count($array));
+		Assert::same(3, count($array));
 		Assert::same($entity->getName(), $array['name']);
 	}
 }

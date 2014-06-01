@@ -12,12 +12,13 @@ namespace Kappa\Tests\DoctrineMocks\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Kdyby\Doctrine\Entities\BaseEntity;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="tests")
  */
-class ExampleEntity
+class ExampleEntity extends BaseEntity
 {
 	/**
 	 * @ORM\Id
@@ -48,7 +49,7 @@ class ExampleEntity
 		$this->entities = new ArrayCollection();
 	}
 
-	public function addEntity($e)
+	/*public function addEntity($e)
 	{
 		$this->entities[] = $e;
 	}
@@ -80,5 +81,5 @@ class ExampleEntity
 	public function getEntities()
 	{
 		return $this->entities;
-	}
+	}*/
 }

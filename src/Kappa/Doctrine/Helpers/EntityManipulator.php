@@ -11,6 +11,7 @@
 namespace Kappa\Doctrine\Helpers;
 
 use Kappa\Doctrine\ReflectionException;
+use Kdyby\Doctrine\MemberAccessException;
 
 /**
  * Class EntityManipulator
@@ -27,11 +28,11 @@ class EntityManipulator
 	public function getValue($entity, $columnName)
 	{
 		$method = $this->getMethodName('get', $columnName);
-		if (!method_exists($entity, $method)) {
-			throw new ReflectionException("Method '{$method}' has not been found");
+		try {
+			return $entity->$method();
+		} catch (MemberAccessException $e) {
+			throw new ReflectionException($e);
 		}
-
-		return $entity->$method();
 	}
 
 	/**
@@ -44,11 +45,11 @@ class EntityManipulator
 	public function setValue($entity, $columnName, $value)
 	{
 		$method = $this->getMethodName('set', $columnName);
-		if (!method_exists($entity, $method)) {
-			throw new ReflectionException("Method '{$method}' has not been found");
+		try {
+			return $entity->$method($value);
+		} catch (MemberAccessException $e) {
+			throw new ReflectionException($e);
 		}
-
-		return $entity->$method($value);
 	}
 
 	/**
@@ -61,11 +62,11 @@ class EntityManipulator
 	public function addValue($entity, $property, $value)
 	{
 		$method = $this->getMethodName('add', $property);
-		if (!method_exists($entity, $method)) {
-			throw new ReflectionException("Method '{$method}' has not been found");
+		try {
+			return $entity->$method($value);
+		} catch (MemberAccessException $e) {
+			throw new ReflectionException($e);
 		}
-
-		return $entity->$method($value);
 	}
 
 	/**
