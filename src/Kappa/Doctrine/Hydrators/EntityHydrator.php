@@ -13,6 +13,7 @@ namespace Kappa\Doctrine\Hydrators;
 use Kappa\Doctrine\Helpers\EntityManipulator;
 use Kappa\Doctrine\ReflectionException;
 use Kdyby\Doctrine\EntityManager;
+use Kdyby\Doctrine\Mapping\ClassMetadata;
 
 /**
  * Class EntityHydrator
@@ -63,7 +64,14 @@ class EntityHydrator
 	private function getEntityProperties($entity)
 	{
 		$entityName = get_class($entity);
-		$associationMappings = $this->entityManager->getClassMetadata($entityName)->getAssociationNames();
+		$metadata = $this->entityManager->getClassMetadata($entityName);
+		$associationMappings = $metadata->getAssociationNames();
+		foreach ($associationMappings as $index => $asoc)  {
+			$mapping = $metadata->getAssociationMapping($asoc);
+			if ($mapping['type'] == ClassMetadata::ONE_TO_ONE || $mapping['type'] == ClassMetadata::MANY_TO_ONE) {
+				unset($associationMappings[$index]);
+			}
+		}
 
 		return $associationMappings;
 	}
