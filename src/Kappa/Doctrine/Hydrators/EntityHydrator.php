@@ -43,7 +43,7 @@ class EntityHydrator
 	 */
 	public function hydrate($entity, array $array)
 	{
-		$mappings = $this->getEntityProperties($entity);
+		$mappings = $this->getCollectionColumnNames($entity);
 		foreach ($array as $property => $value) {
 			try {
 				if (in_array($property, $mappings)) {
@@ -61,7 +61,7 @@ class EntityHydrator
 	 * @param object $entity
 	 * @return array
 	 */
-	private function getEntityProperties($entity)
+	private function getCollectionColumnNames($entity)
 	{
 		$entityName = get_class($entity);
 		$metadata = $this->entityManager->getClassMetadata($entityName);
