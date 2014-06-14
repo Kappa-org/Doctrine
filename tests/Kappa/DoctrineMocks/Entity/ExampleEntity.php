@@ -48,38 +48,4 @@ class ExampleEntity extends BaseEntity
 	{
 		$this->entities = new ArrayCollection();
 	}
-
-	/*public function addEntity($e)
-	{
-		$this->entities[] = $e;
-	}
-
-	public function setName($name)
-	{
-		$this->name = $name;
-
-		return $this;
-	}
-
-	public function setEmail($email)
-	{
-		$this->email = $email;
-
-		return $this;
-	}
-
-	public function getName()
-	{
-		return $this->name;
-	}
-
-	public function getEmail()
-	{
-		return $this->email;
-	}
-
-	public function getEntities()
-	{
-		return $this->entities;
-	}*/
 }
