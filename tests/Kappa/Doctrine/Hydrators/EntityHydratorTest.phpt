@@ -46,7 +46,7 @@ class EntityHydratorTest extends TestCase
 		$array = array(
 			'name' => 'Budry',
 			'email' => 'budry@gmail.com',
-			'entities'=> new ExampleEntity2()
+			'entities'=> array(new ExampleEntity2())
 		);
 		Assert::null($entity->getName());
 		Assert::null($entity->getName());
