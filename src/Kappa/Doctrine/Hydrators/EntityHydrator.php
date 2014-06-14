@@ -46,8 +46,10 @@ class EntityHydrator
 		$mappings = $this->getCollectionColumnNames($entity);
 		foreach ($array as $property => $value) {
 			try {
-				if (in_array($property, $mappings)) {
-					$this->entityManipulator->addValue($entity, $property, $value);
+				if (is_array($value) && in_array($property, $mappings)) {
+					foreach ($value as $object) {
+						$this->entityManipulator->addValue($entity, $property, $object);
+					}
 				} else {
 					$this->entityManipulator->setValue($entity, $property, $value);
 				}
