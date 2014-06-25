@@ -17,3 +17,13 @@ The best way to install Kappa\Doctrine is using [Composer](https://getcomposer.o
 ```shell
 $ composer require kappa/doctrine:@dev
 ```
+
+## Usages
+
+If you can use get dao by entity interface you can configure `classMetadataFactory` in doctrine
+config section
+
+```yaml
+doctrine
+	classMetadataFactory: Kappa\Doctrine\Mapping\ClassMetadataFactory
+```
