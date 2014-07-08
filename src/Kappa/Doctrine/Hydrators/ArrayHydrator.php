@@ -63,7 +63,7 @@ class ArrayHydrator
 	{
 		$entityName = get_class($entity);
 		$associationMappings = $this->entityManager->getClassMetadata($entityName)->getAssociationNames();
-		$columnNames = $this->entityManager->getClassMetadata($entityName)->getColumnNames();
+		$columnNames = $this->entityManager->getClassMetadata($entityName)->getFieldNames();
 
 		return array_merge($columnNames, $associationMappings);
 	}
