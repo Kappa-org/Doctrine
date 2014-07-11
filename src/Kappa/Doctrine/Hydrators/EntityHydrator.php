@@ -40,21 +40,24 @@ class EntityHydrator
 	/**
 	 * @param object $entity
 	 * @param array $array
+	 * @param array $ignore
 	 */
-	public function hydrate($entity, array $array)
+	public function hydrate($entity, array $array, array $ignore = array())
 	{
 		$mappings = $this->getCollectionColumnNames($entity);
 		foreach ($array as $property => $value) {
-			try {
-				if (is_array($value) && in_array($property, $mappings)) {
-					foreach ($value as $object) {
-						$this->entityManipulator->addValue($entity, $property, $object);
+			if (!in_array($property, $ignore)) {
+				try {
+					if (is_array($value) && in_array($property, $mappings)) {
+						foreach ($value as $object) {
+							$this->entityManipulator->addValue($entity, $property, $object);
+						}
+					} else {
+						$this->entityManipulator->setValue($entity, $property, $value);
 					}
-				} else {
-					$this->entityManipulator->setValue($entity, $property, $value);
+				} catch (ReflectionException $e) {
+					continue;
 				}
-			} catch (ReflectionException $e) {
-				continue;
 			}
 		}
 	}
