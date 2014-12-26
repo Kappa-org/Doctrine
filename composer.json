@@ -21,6 +21,7 @@
     "kdyby/doctrine": "@dev"
   },
   "require-dev": {
+    "nette/nette": "@dev",
     "nette/tester": "@dev"
   },
   "autoload": {
