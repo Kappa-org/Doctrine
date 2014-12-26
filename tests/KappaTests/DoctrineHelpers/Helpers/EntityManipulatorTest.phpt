@@ -60,6 +60,23 @@ class EntityManipulatorTest extends TestCase
 		Assert::count(1, $class->pub_categories);
 		Assert::count(1, $class->pub_items);
 	}
+
+	public function testGet()
+	{
+		$class = new TestClass();
+		$class->setOne('one');
+		$class->two = 'two';
+		$class->addCategory($class);
+		$class->addItem($class);
+		$class->pub_categories->add($class);
+		$class->pub_items->add($class);
+		Assert::same('one', $this->entityManipulator->get($class, 'one'));
+		Assert::same('two', $this->entityManipulator->get($class, 'two'));
+		Assert::count(1, $this->entityManipulator->get($class, 'categories'));
+		Assert::count(1, $this->entityManipulator->get($class, 'pub_categories'));
+		Assert::count(1, $this->entityManipulator->get($class, 'items'));
+		Assert::count(1, $this->entityManipulator->get($class, 'pub_items'));
+	}
 }
 
 /**
