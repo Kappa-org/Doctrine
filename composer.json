@@ -18,6 +18,7 @@
   "require": {
     "php": ">= 5.4.0",
     "nette/di": "@dev",
+    "nette/utils": "@dev",
     "kdyby/doctrine": "@dev"
   },
   "require-dev": {
