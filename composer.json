@@ -19,7 +19,8 @@
     "php": ">= 5.4.0",
     "nette/di": "@dev",
     "nette/utils": "@dev",
-    "kdyby/doctrine": "@dev"
+    "kdyby/doctrine": "@dev",
+    "kdyby/events": "@dev"
   },
   "require-dev": {
     "nette/nette": "@dev",
