@@ -51,15 +51,21 @@ class EntityManipulator extends Object
 	/**
 	 * @param object $entity
 	 * @param string $column
+	 * @param bool $convertCollections
 	 * @return mixed
 	 */
-	public function get($entity, $column)
+	public function get($entity, $column, $convertCollections = true)
 	{
 		$ref = new \ReflectionProperty($entity, $column);
 		if ($ref->isPublic()) {
-			return $ref->getValue($entity);
+			$retVal =  $ref->getValue($entity);
 		} else {
-			return Callback::invoke([$entity, $this->getMethodName(self::GET_TYPE, $column)]);
+			$retVal = Callback::invoke([$entity, $this->getMethodName(self::GET_TYPE, $column)]);
+		}
+		if ($convertCollections && $retVal instanceof Collection) {
+			return $retVal->toArray();
+		} else {
+			return $retVal;
 		}
 	}
 

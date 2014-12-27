@@ -71,10 +71,10 @@ class EntityManipulatorTest extends TestCase
 		$class->pub_items->add($class);
 		Assert::same('one', $this->entityManipulator->get($class, 'one'));
 		Assert::same('two', $this->entityManipulator->get($class, 'two'));
-		Assert::type('Doctrine\Common\Collections\Collection', $this->entityManipulator->get($class, 'categories'));
-		Assert::type('Doctrine\Common\Collections\Collection', $this->entityManipulator->get($class, 'pub_categories'));
-		Assert::type('Doctrine\Common\Collections\Collection', $this->entityManipulator->get($class, 'items'));
-		Assert::type('Doctrine\Common\Collections\Collection', $this->entityManipulator->get($class, 'pub_items'));
+		Assert::type('Doctrine\Common\Collections\Collection', $this->entityManipulator->get($class, 'categories', false));
+		Assert::type('Doctrine\Common\Collections\Collection', $this->entityManipulator->get($class, 'pub_categories', false));
+		Assert::true(is_array($this->entityManipulator->get($class, 'items')));
+		Assert::true(is_array($this->entityManipulator->get($class, 'pub_items', true)));
 		Assert::count(1, $this->entityManipulator->get($class, 'categories'));
 		Assert::count(1, $this->entityManipulator->get($class, 'pub_categories'));
 		Assert::count(1, $this->entityManipulator->get($class, 'items'));
