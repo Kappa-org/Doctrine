@@ -17,13 +17,13 @@
   },
   "require": {
     "php": ">= 5.4.0",
-    "nette/di": "@dev",
-    "nette/utils": "@dev",
-    "doctrine/orm": ">=2.4.7,<2.6-dev"
+    "nette/di": "~2.2@dev",
+    "nette/utils": "~2.2@dev",
+    "doctrine/orm": ">=2.4.7"
   },
   "require-dev": {
-    "nette/nette": "@dev",
-    "nette/tester": "@dev",
+    "nette/nette": "~2.2@dev",
+    "nette/tester": ">=1.2.0",
     "kdyby/doctrine": "@dev",
     "kdyby/events": "@dev"
   },
