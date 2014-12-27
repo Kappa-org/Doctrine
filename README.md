@@ -34,7 +34,7 @@ echo $data['name'] // returns "John"
 echo $data['email'] // returns "john@example.com"
 ```
 
-`ArrayHydrator::hydrate()` accept two required arguments and two next optional arguments. First optional argument define ignored columns
+`ArrayHydrator::hydrate()` requires two arguments and two optionals arguments. First optional argument define ignored columns
 and second argument you can use for conversion Doctrine collections to array
 
 ### EntityHydrator
@@ -49,7 +49,7 @@ $entity->setNick('johnyX');
 $entityHydrator->hydrate($entity, $data);
 ```
 
-`EntityHydrator::hydrate()` accept two required arguments and one optional. Option argument can be array of ignored keys in input array.
+`EntityHydrator::hydrate()` requires two arguments and one optional. Option argument can be array of ignored keys in input array.
 
 For columns defined as Doctrine collections can be used `add()` method of the collection 
 
