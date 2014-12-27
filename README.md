@@ -53,6 +53,6 @@ $entityHydrator->hydrate($entity, $data);
 
 `EntityHydrator::hydrate()` requires two arguments and one optional. Option argument can be array of ignored keys in input array.
 
-For columns defined as Doctrine collections can be used `add()` method of the collection 
+For columns defined as Doctrine collections will be used `add()` method of the collection 
 
 
