@@ -53,4 +53,9 @@ class RelationsEntity extends BaseEntity
 		$this->otms = new ArrayCollection();
 		$this->mtmies = new ArrayCollection();
 	}
+
+	public function getOtms()
+	{
+		return $this->otms;
+	}
 }
