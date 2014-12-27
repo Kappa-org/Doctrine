@@ -1,8 +1,6 @@
 CREATE DATABASE IF NOT EXISTS test;
 
-USE mysql
-UPDATE user SET password=PASSWORD('root') WHERE user='root';
-FLUSH PRIVILEGES;
+USE test;
 
 CREATE TABLE `relations_id` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -13,7 +11,7 @@ ALTER TABLE `relations_id`
 ADD INDEX `parent_id` (`parent_id`);
 
 ALTER TABLE `relations_id`
-ADD FOREIGN KEY (`parent_id`) REFERENCES `relations_id` (`id`)
+ADD FOREIGN KEY (`parent_id`) REFERENCES `relations_id` (`id`);
 
 INSERT INTO `relations_id` (`parent_id`)
 VALUES (NULL);
