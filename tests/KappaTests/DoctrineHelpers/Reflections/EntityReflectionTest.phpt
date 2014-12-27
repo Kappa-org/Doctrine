@@ -13,8 +13,10 @@
 namespace KappaTests\DoctrineHelpers;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Kappa\DoctrineHelpers\Entities\RelationsEntity;
 use Kappa\DoctrineHelpers\Helpers\EntityManipulator;
 use Kappa\DoctrineHelpers\Reflections\EntityReflection;
+use KappaTests\Entities\StaticEntity;
 use Nette\DI\Container;
 use Tester\Assert;
 use Tester\TestCase;
@@ -82,6 +84,29 @@ class EntityManipulatorTest extends TestCase
 		Assert::count(1, $entityReflection->get('pub_categories'));
 		Assert::count(1, $entityReflection->get('items'));
 		Assert::count(1, $entityReflection->get('pub_items'));
+	}
+
+	public function testSetterType()
+	{
+		$entity = new RelationsEntity();
+		$entity_static = new StaticEntity();
+		$entityReflection = new EntityReflection($this->em, $entity);
+		$entityReflection_static = new EntityReflection($this->em, $entity_static);
+		Assert::same(EntityReflection::SET_TYPE, $entityReflection->getSetterType('oto'));
+		Assert::same(EntityReflection::SET_TYPE, $entityReflection->getSetterType('mto'));
+		Assert::same(EntityReflection::ADD_TYPE, $entityReflection->getSetterType('otms'));
+		Assert::same(EntityReflection::ADD_TYPE, $entityReflection->getSetterType('mtmies'));
+		Assert::same(EntityReflection::SET_TYPE, $entityReflection_static->getSetterType('oto'));
+	}
+
+	public function testGetProperties()
+	{
+		$entity = new RelationsEntity();
+		$entity_static = new StaticEntity();
+		$entityReflection = new EntityReflection($this->em, $entity);
+		$entityReflection_static = new EntityReflection($this->em, $entity_static);
+		Assert::count(4, $entityReflection_static->getProperties());
+		Assert::count(6, $entityReflection->getProperties());
 	}
 }
 
