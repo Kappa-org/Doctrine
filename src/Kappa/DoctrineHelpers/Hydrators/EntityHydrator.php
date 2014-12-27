@@ -41,8 +41,8 @@ class EntityHydrator extends Object
 	public function hydrate($entity, array $values, array $ignoreList = [])
 	{
 		$entityReflection = $this->entityReflectionFactory->create($entity);
-		foreach ($entityReflection->getProperties() as $column) {
-			if (!in_array($column, $ignoreList) && array_key_exists($column, $values)) {
+		foreach ($values as $column => $value) {
+			if (!in_array($column, $ignoreList) && in_array($column, $entityReflection->getProperties())) {
 				$type = $entityReflection->getSetterType($column);
 				$entityReflection->invoke($column, $values[$column], $type);
 			}
