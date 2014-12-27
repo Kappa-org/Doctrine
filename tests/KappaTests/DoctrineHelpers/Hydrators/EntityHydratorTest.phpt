@@ -87,6 +87,18 @@ class EntityHydratorTest extends TestCase
 		Assert::same('default', $entity->getString());
 		Assert::same(45, $entity->getInt());
 	}
+
+	public function testHydrateCollections()
+	{
+		$entity = new RelationsEntity();
+		$entity->addMtmy($entity);
+		$data = [
+			'mtmies' => $entity
+		];
+		Assert::count(1, $entity->getMtmies());
+		$this->entityHydrator->hydrate($entity, $data);
+		Assert::count(2, $entity->getMtmies());
+	}
 }
 
 \run(new EntityHydratorTest(getContainer()));
