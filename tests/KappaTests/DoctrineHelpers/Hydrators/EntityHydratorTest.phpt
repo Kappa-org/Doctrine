@@ -12,6 +12,7 @@
 
 namespace KappaTests\DoctrineHelpers;
 
+use KappaTests\Entities\RelationIdEntity;
 use Kappa\DoctrineHelpers\Hydrators\EntityHydrator;
 use Kappa\DoctrineHelpers\Reflections\EntityReflectionFactory;
 use KappaTests\Entities\GlobalEntity;
@@ -77,6 +78,16 @@ class EntityHydratorTest extends TestCase
 		Assert::count(1, $entity->getToMany_s());
 		$this->entityHydrator->hydrate($entity, $data);
 		Assert::count(2, $entity->getToMany_s());
+	}
+
+	public function testHydrateRelationById()
+	{
+		$entity = new RelationIdEntity();
+		$data = [
+			'parent' => 1
+		];
+		$this->entityHydrator->hydrate($entity, $data);
+		Assert::type('KappaTests\Entities\RelationIdEntity', $entity->getParent());
 	}
 }
 

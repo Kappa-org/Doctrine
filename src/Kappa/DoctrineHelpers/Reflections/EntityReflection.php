@@ -11,9 +11,9 @@
 namespace Kappa\DoctrineHelpers\Reflections;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
+use Kdyby\Doctrine\EntityManager;
 use Nette\Object;
 use Nette\Utils\Callback;
 
@@ -83,6 +83,12 @@ class EntityReflection extends Object
 	 */
 	public function invoke($column, $value, $type)
 	{
+		$metadata = $this->entityManager->getClassMetadata($this->getEntityClass());
+		if (in_array($column, $metadata->getAssociationNames()) && is_numeric($value)) {
+			$dao = $this->entityManager->getDao($metadata->getAssociationMapping($column)['targetEntity']);
+			$targetEntity = $dao->find($value);
+			$value = $targetEntity;
+		}
 		$ref = new \ReflectionProperty($this->entity, $column);
 		if ($ref->isPublic()) {
 			if ($ref->getValue($this->entity) instanceof Collection) {
