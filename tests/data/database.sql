@@ -1,5 +1,9 @@
 CREATE DATABASE IF NOT EXISTS test;
 
+USE mysql
+UPDATE user SET password=PASSWORD('root') WHERE user='root';
+FLUSH PRIVILEGES;
+
 CREATE TABLE `relations_id` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `parent_id` int NULL
