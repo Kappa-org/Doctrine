@@ -1,4 +1,6 @@
-# Kappa\DoctrineHelpers
+[![Build Status](https://travis-ci.org/Kappa-org/DoctrineHelpers.svg)](https://travis-ci.org/Kappa-org/DoctrineHelpers)
+
+# Kappa\DoctrineHelpers 
 
 Collection of classes for better work with Doctrine
 
