@@ -19,9 +19,7 @@ $ composer require kappa/doctrine-helpers:@dev
 
 ## Usages
 
-### Hydartors
-
-#### ArrayHydrator
+### ArrayHydrator
 
 ```php
 $data = [
@@ -39,7 +37,7 @@ echo $data['email'] // returns "john@example.com"
 `ArrayHydrator::hydrate()` accept two required arguments and two next optional arguments. First optional argument define ignored columns
 and second argument you can use for conversion Doctrine collections to array
 
-#### EntityHydrator
+### EntityHydrator
 
 ```php
 $data = [
