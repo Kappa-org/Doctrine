@@ -14,6 +14,8 @@ namespace KappaTests\DoctrineHelpers;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Kappa\DoctrineHelpers\Helpers\EntityManipulator;
+use Kappa\DoctrineHelpers\Reflections\EntityReflection;
+use Nette\DI\Container;
 use Tester\Assert;
 use Tester\TestCase;
 
@@ -27,14 +29,13 @@ require_once __DIR__ . '/../../bootstrap.php';
  */
 class EntityManipulatorTest extends TestCase
 {
-	/** @var EntityManipulator */
-	private $entityManipulator;
+	/** @var \Kdyby\Doctrine\EntityManager */
+	private $em;
 
-	protected function setUp()
+	public function __construct(Container $container)
 	{
-		$this->entityManipulator = new EntityManipulator();
+		$this->em = $container->getByType('Kdyby\Doctrine\EntityManager');
 	}
-
 	public function testInvoke()
 	{
 		$class = new TestClass();
@@ -46,12 +47,13 @@ class EntityManipulatorTest extends TestCase
 			'items' => $class,
 			'pub_items' => $class,
 		];
-		$this->entityManipulator->invoke($class, 'one', $data['one'], EntityManipulator::SET_TYPE);
-		$this->entityManipulator->invoke($class, 'two', $data['two'], EntityManipulator::SET_TYPE);
-		$this->entityManipulator->invoke($class, 'categories', $data['categories'], EntityManipulator::ADD_TYPE);
-		$this->entityManipulator->invoke($class, 'pub_categories', $data['pub_categories'], EntityManipulator::ADD_TYPE);
-		$this->entityManipulator->invoke($class, 'items', $data['items'], EntityManipulator::ADD_TYPE);
-		$this->entityManipulator->invoke($class, 'pub_items', $data['pub_items'], EntityManipulator::ADD_TYPE);
+		$entityReflection = new EntityReflection($this->em, $class);
+		$entityReflection->invoke('one', $data['one'], EntityReflection::SET_TYPE);
+		$entityReflection->invoke('two', $data['two'], EntityReflection::SET_TYPE);
+		$entityReflection->invoke('categories', $data['categories'], EntityReflection::ADD_TYPE);
+		$entityReflection->invoke('pub_categories', $data['pub_categories'], EntityReflection::ADD_TYPE);
+		$entityReflection->invoke('items', $data['items'], EntityReflection::ADD_TYPE);
+		$entityReflection->invoke('pub_items', $data['pub_items'], EntityReflection::ADD_TYPE);
 		Assert::same($data['one'], $class->getOne());
 		Assert::same($data['two'], $class->two);
 		Assert::count(1, $class->getCategories());
@@ -69,16 +71,17 @@ class EntityManipulatorTest extends TestCase
 		$class->addItem($class);
 		$class->pub_categories->add($class);
 		$class->pub_items->add($class);
-		Assert::same('one', $this->entityManipulator->get($class, 'one'));
-		Assert::same('two', $this->entityManipulator->get($class, 'two'));
-		Assert::type('Doctrine\Common\Collections\Collection', $this->entityManipulator->get($class, 'categories', false));
-		Assert::type('Doctrine\Common\Collections\Collection', $this->entityManipulator->get($class, 'pub_categories', false));
-		Assert::true(is_array($this->entityManipulator->get($class, 'items')));
-		Assert::true(is_array($this->entityManipulator->get($class, 'pub_items', true)));
-		Assert::count(1, $this->entityManipulator->get($class, 'categories'));
-		Assert::count(1, $this->entityManipulator->get($class, 'pub_categories'));
-		Assert::count(1, $this->entityManipulator->get($class, 'items'));
-		Assert::count(1, $this->entityManipulator->get($class, 'pub_items'));
+		$entityReflection = new EntityReflection($this->em, $class);
+		Assert::same('one', $entityReflection->get('one'));
+		Assert::same('two', $entityReflection->get('two'));
+		Assert::type('Doctrine\Common\Collections\Collection', $entityReflection->get('categories', false));
+		Assert::type('Doctrine\Common\Collections\Collection', $entityReflection->get('pub_categories', false));
+		Assert::true(is_array($entityReflection->get('items')));
+		Assert::true(is_array($entityReflection->get('pub_items', true)));
+		Assert::count(1, $entityReflection->get('categories'));
+		Assert::count(1, $entityReflection->get('pub_categories'));
+		Assert::count(1, $entityReflection->get('items'));
+		Assert::count(1, $entityReflection->get('pub_items'));
 	}
 }
 

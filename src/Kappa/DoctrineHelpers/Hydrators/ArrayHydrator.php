@@ -11,7 +11,7 @@
 namespace Kappa\DoctrineHelpers\Hydrators;
 
 use Kappa\DoctrineHelpers\Helpers\EntityManipulator;
-use Kdyby\Doctrine\EntityManager;
+use Kappa\DoctrineHelpers\Reflections\EntityReflectionFactory;
 use Nette\Object;
 
 /**
@@ -22,20 +22,15 @@ use Nette\Object;
  */
 class ArrayHydrator extends Object
 {
-	/** @var EntityManager */
-	private $entityManager;
-
-	/** @var EntityManipulator */
-	private $entityManipulator;
+	/** @var EntityReflectionFactory */
+	private $entityReflectionFactory;
 
 	/**
-	 * @param EntityManager $entityManager
-	 * @param EntityManipulator $entityManipulator
+	 * @param EntityReflectionFactory $entityReflectionFactory
 	 */
-	public function __construct(EntityManager $entityManager, EntityManipulator $entityManipulator)
+	public function __construct(EntityReflectionFactory $entityReflectionFactory)
 	{
-		$this->entityManager = $entityManager;
-		$this->entityManipulator = $entityManipulator;
+		$this->entityReflectionFactory = $entityReflectionFactory;
 	}
 
 	/**
@@ -46,23 +41,11 @@ class ArrayHydrator extends Object
 	 */
 	public function hydrate(array &$array, $entity, array $ignoreList = [], $convertCollections = true)
 	{
-		$columns = $this->getColumns($entity);
-		foreach ($columns as $column) {
+		$entityReflection = $this->entityReflectionFactory->create($entity);
+		foreach ($entityReflection->getProperties() as $column) {
 			if (!in_array($column, $ignoreList)) {
-				$array[$column] = $this->entityManipulator->get($entity, $column, $convertCollections);
+				$array[$column] = $entityReflection->get($column, $convertCollections);
 			}
 		}
-	}
-
-	/**
-	 * @param object $entity
-	 * @return array
-	 */
-	private function getColumns($entity)
-	{
-		$entityClass = get_class($entity);
-		$mapping = $this->entityManager->getClassMetadata($entityClass);
-
-		return array_merge($mapping->getFieldNames(), $mapping->getAssociationNames());
 	}
 }

@@ -10,10 +10,8 @@
 
 namespace Kappa\DoctrineHelpers\Hydrators;
 
-use Doctrine\ORM\Mapping\MappingException;
 use Kappa\DoctrineHelpers\Helpers\EntityManipulator;
-use Kdyby\Doctrine\EntityManager;
-use Kdyby\Doctrine\Mapping\ClassMetadata;
+use Kappa\DoctrineHelpers\Reflections\EntityReflectionFactory;
 use Nette\Object;
 
 /**
@@ -24,20 +22,15 @@ use Nette\Object;
  */
 class EntityHydrator extends Object
 {
-	/** @var EntityManager */
-	private $entityManager;
-
-	/** @var EntityManipulator */
-	private $entityManipulator;
+	/** @var EntityReflectionFactory */
+	private $entityReflectionFactory;
 
 	/**
-	 * @param EntityManager $entityManager
-	 * @param EntityManipulator $entityManipulator
+	 * @param EntityReflectionFactory $entityReflectionFactory
 	 */
-	public function __construct(EntityManager $entityManager, EntityManipulator $entityManipulator)
+	public function __construct(EntityReflectionFactory $entityReflectionFactory)
 	{
-		$this->entityManager = $entityManager;
-		$this->entityManipulator = $entityManipulator;
+		$this->entityReflectionFactory = $entityReflectionFactory;
 	}
 
 	/**
@@ -47,46 +40,12 @@ class EntityHydrator extends Object
 	 */
 	public function hydrate($entity, array $values, array $ignoreList = [])
 	{
-		$columns = $this->getColumns($entity);
-		foreach ($columns as $column) {
+		$entityReflection = $this->entityReflectionFactory->create($entity);
+		foreach ($entityReflection->getProperties() as $column) {
 			if (!in_array($column, $ignoreList) && array_key_exists($column, $values)) {
-				$type = $this->getSetterType($entity, $column);
-				$this->entityManipulator->invoke($entity, $column, $values[$column], $type);
+				$type = $entityReflection->getSetterType($column);
+				$entityReflection->invoke($column, $values[$column], $type);
 			}
-		}
-	}
-
-	/**
-	 * @param object $entity
-	 * @return array
-	 */
-	private function getColumns($entity)
-	{
-		$entityName = get_class($entity);
-		$metadata = $this->entityManager->getClassMetadata($entityName);
-		$columns = array_merge($metadata->getFieldNames(), $metadata->getAssociationNames());
-
-		return $columns;
-	}
-
-	/**
-	 * @param $entity
-	 * @param $columnName
-	 * @return string
-	 */
-	private function getSetterType($entity, $columnName)
-	{
-		$entityName = get_class($entity);
-		$metadata = $this->entityManager->getClassMetadata($entityName);
-		try {
-			$assoc = $metadata->getAssociationMapping($columnName);
-			if ($assoc['type'] == ClassMetadata::ONE_TO_ONE || $assoc['type'] == ClassMetadata::MANY_TO_ONE) {
-				return EntityManipulator::SET_TYPE;
-			} else {
-				return EntityManipulator::ADD_TYPE;
-			}
-		} catch (MappingException $e) {
-			return EntityManipulator::SET_TYPE;
 		}
 	}
 }

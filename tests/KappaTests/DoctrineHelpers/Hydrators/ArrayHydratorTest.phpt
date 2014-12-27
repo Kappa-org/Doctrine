@@ -15,6 +15,7 @@ namespace KappaTests\DoctrineHelpers;
 use Kappa\DoctrineHelpers\Entities\RelationsEntity;
 use Kappa\DoctrineHelpers\Helpers\EntityManipulator;
 use Kappa\DoctrineHelpers\Hydrators\ArrayHydrator;
+use Kappa\DoctrineHelpers\Reflections\EntityReflectionFactory;
 use KappaTests\Entities\StaticEntity;
 use Nette\DI\Container;
 use Tester\Assert;
@@ -39,7 +40,7 @@ class ArrayHydratorTest extends TestCase
 	public function __construct(Container $container)
 	{
 		$em = $container->getByType('Kdyby\Doctrine\EntityManager');
-		$this->arrayHydrator = new ArrayHydrator($em, new EntityManipulator());
+		$this->arrayHydrator = new ArrayHydrator(new EntityReflectionFactory($em));
 	}
 
 	public function testStaticData()

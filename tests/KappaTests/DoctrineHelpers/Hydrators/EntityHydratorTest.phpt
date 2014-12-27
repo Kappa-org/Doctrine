@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Kappa\DoctrineHelpers\Entities\RelationsEntity;
 use Kappa\DoctrineHelpers\Helpers\EntityManipulator;
 use Kappa\DoctrineHelpers\Hydrators\EntityHydrator;
+use Kappa\DoctrineHelpers\Reflections\EntityReflectionFactory;
 use KappaTests\Entities\StaticEntity;
 use Nette\DI\Container;
 use Tester\Assert;
@@ -40,7 +41,7 @@ class EntityHydratorTest extends TestCase
 	public function __construct(Container $container)
 	{
 		$entityManager = $container->getByType('Kdyby\Doctrine\EntityManager');
-		$this->entityHydrator = new EntityHydrator($entityManager, new EntityManipulator());
+		$this->entityHydrator = new EntityHydrator(new EntityReflectionFactory($entityManager));
 	}
 
 	public function testStaticData()
