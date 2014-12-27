@@ -32,8 +32,8 @@ $entity->setName('John')
 	->setEmail('john@example.com');
 $arrayHydrator->hydrate($data, $entity);
 echo $data['defaultValue'] // returns "Test"
-echo $data['name'] // returns "John"
-echo $data['email'] // returns "john@example.com"
+echo $data['name']; // returns "John"
+echo $data['email']; // returns "john@example.com"
 ```
 
 `ArrayHydrator::hydrate()` requires two arguments and two optionals arguments. First optional argument define ignored columns
