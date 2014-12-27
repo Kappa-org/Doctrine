@@ -59,9 +59,10 @@ For columns defined as Doctrine collections will be used `add()` method of the c
 #### Example
 
 **Database**
-id	| parent_id	|	name
+
+id  | parent_id | name
 ----|-----------|-------
-1	| NULL		| Johm
+1   | NULL      | Johm
 
 **Usages**
 ```php
