@@ -16,6 +16,7 @@ use Kappa\DoctrineHelpers\Entities\RelationsEntity;
 use Kappa\DoctrineHelpers\Helpers\EntityManipulator;
 use Kappa\DoctrineHelpers\Hydrators\ArrayHydrator;
 use Kappa\DoctrineHelpers\Reflections\EntityReflectionFactory;
+use KappaTests\Entities\GlobalEntity;
 use KappaTests\Entities\StaticEntity;
 use Nette\DI\Container;
 use Tester\Assert;
@@ -43,76 +44,51 @@ class ArrayHydratorTest extends TestCase
 		$this->arrayHydrator = new ArrayHydrator(new EntityReflectionFactory($em));
 	}
 
-	public function testStaticData()
+	public function testBasicHydrate()
 	{
-		$entity = new StaticEntity();
-		$entity->setString('string');
-		$entity->setInt(40);
-		$entity->public = 'public';
-		$array = [];
-		Assert::count(0, $array);
-		$this->arrayHydrator->hydrate($array, $entity);
-		Assert::true(array_key_exists('string', $array));
-		Assert::true(array_key_exists('int', $array));
-		Assert::true(array_key_exists('public', $array));
-		Assert::same('string', $array['string']);
-		Assert::same(40, $array['int']);
-		Assert::same('public', $array['public']);
+		$entity = new GlobalEntity();
+		$entity->addToMany_($entity);
+		$entity->addToMany_y($entity);
+		$entity->pub_column = 'pub_column';
+		$data = [];
+		$this->arrayHydrator->hydrate($data, $entity);
+		Assert::same('pub_column', $data['pub_column']);
+		Assert::true(is_array($data['toMany_ies']));
+		Assert::true(is_array($data['toMany_s']));
+	}
+
+	public function testCollectionHydrate()
+	{
+		$entity = new GlobalEntity();
+		$entity->addToMany_($entity);
+		$entity->addToMany_y($entity);
+		$data = [];
+		$this->arrayHydrator->hydrate($data, $entity, [], false);
+		Assert::type('Doctrine\Common\Collections\Collection', $data['toMany_ies']);
+		Assert::type('Doctrine\Common\Collections\Collection', $data['toMany_s']);
 	}
 
 	public function testIgnore()
 	{
-		$entity = new StaticEntity();
-		$entity->setString('string');
-		$entity->setInt(40);
-		$entity->public = 'public';
-		$array = [];
-		Assert::count(0, $array);
-		$this->arrayHydrator->hydrate($array, $entity, ['string']);
-		Assert::false(array_key_exists('string', $array));
-		Assert::true(array_key_exists('int', $array));
-		Assert::true(array_key_exists('public', $array));
+		$entity = new GlobalEntity();
+		$entity->setColumn('column');
+		$data = [
+			'column' => 'data'
+		];
+		$this->arrayHydrator->hydrate($data, $entity, ['column']);
+		Assert::same('data', $data['column']);
 	}
 
 	public function testDefault()
 	{
-		$entity = new StaticEntity();
-		$entity->setString('string');
-		$entity->setInt(40);
-		$entity->public = 'public';
-		$array = [
-			'test' => 30
+		$entity = new GlobalEntity();
+		$entity->setColumn('column');
+		$data = [
+			'no' => 'data'
 		];
-		Assert::same(30, $array['test']);
-	}
-
-	public function testRelations()
-	{
-		$entity = new RelationsEntity();
-		$entity->setOto($entity);
-		$entity->setMto($entity);
-		$entity->addOtm($entity);
-		$entity->addMtmy($entity);
-		$entity->public_mto = $entity;
-		$array = [];
-		$array_collections = [];
-		$this->arrayHydrator->hydrate($array, $entity);
-		$this->arrayHydrator->hydrate($array_collections, $entity, [], false);
-		Assert::count(6, $array);
-		Assert::true(array_key_exists('oto', $array));
-		Assert::true(array_key_exists('mto', $array));
-		Assert::true(array_key_exists('otms', $array));
-		Assert::true(array_key_exists('mtmies', $array));
-		Assert::true(array_key_exists('public_mto', $array));
-		Assert::true(array_key_exists('oto', $array_collections));
-		Assert::true(array_key_exists('mto', $array_collections));
-		Assert::true(array_key_exists('otms', $array_collections));
-		Assert::true(array_key_exists('mtmies', $array_collections));
-		Assert::true(array_key_exists('public_mto', $array_collections));
-		Assert::true(is_array($array['mtmies']));
-		Assert::true(is_array($array['otms']));
-		Assert::true(is_array($array_collections['mtmies']));
-		Assert::type('Doctrine\Common\Collections\Collection', $array_collections['otms']);
+		$this->arrayHydrator->hydrate($data, $entity);
+		Assert::same('column', $data['column']);
+		Assert::same('data', $data['no']);
 	}
 }
 

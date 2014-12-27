@@ -12,12 +12,9 @@
 
 namespace KappaTests\DoctrineHelpers;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Kappa\DoctrineHelpers\Entities\RelationsEntity;
-use Kappa\DoctrineHelpers\Helpers\EntityManipulator;
 use Kappa\DoctrineHelpers\Hydrators\EntityHydrator;
 use Kappa\DoctrineHelpers\Reflections\EntityReflectionFactory;
-use KappaTests\Entities\StaticEntity;
+use KappaTests\Entities\GlobalEntity;
 use Nette\DI\Container;
 use Tester\Assert;
 use Tester\TestCase;
@@ -44,61 +41,42 @@ class EntityHydratorTest extends TestCase
 		$this->entityHydrator = new EntityHydrator(new EntityReflectionFactory($entityManager));
 	}
 
-	public function testStaticData()
+	public function testBasicHydrate()
 	{
-		$entity = new StaticEntity();
+		$entity = new GlobalEntity();
 		$data = [
-			'string' => "dasasd",
-			"public" => 45,
-			"int" => 46
+			'non-column' => 'data',
+			'column' => 'column',
+			'pub_column' => 'pub_column',
+			'toMany_ies' => $entity
 		];
 		$this->entityHydrator->hydrate($entity, $data);
-		Assert::same($data['string'], $entity->getString());
-		Assert::same($data['int'], $entity->getInt());
-		Assert::same($data['public'], $entity->public);
+		Assert::same('column', $entity->getColumn());
+		Assert::same('pub_column', $entity->pub_column);
+		Assert::count(1, $entity->getToMany_ies());
 	}
 
-	public function testRelationsData()
+	public function testIgnore()
 	{
-		$entity = new RelationsEntity();
+		$entity = new GlobalEntity();
+		$entity->setColumn('test');
 		$data = [
-			'oto' => $entity,
-			'mto' => $entity,
-			'otms' => $entity,
-			'mtmies' => $entity,
-			'public_mto' => $entity,
+			'column' => 'data'
 		];
+		$this->entityHydrator->hydrate($entity, $data, ['column']);
+		Assert::same('test', $entity->getColumn());
+	}
+
+	public function testAddIntoCollections()
+	{
+		$entity = new GlobalEntity();
+		$entity->addToMany_($entity);
+		$data = [
+			'toMany_s' => $entity
+		];
+		Assert::count(1, $entity->getToMany_s());
 		$this->entityHydrator->hydrate($entity, $data);
-		Assert::same($entity, $entity->getOto());
-		Assert::same($entity, $entity->getMto());
-		Assert::same($entity, $entity->public_mto);
-		Assert::count(1, $entity->getOtms());
-		Assert::count(1, $entity->getMtmies());
-	}
-
-	public function testIgnoreStatic()
-	{
-		$entity = new StaticEntity();
-		$entity->setString("default");
-		$data = [
-			"string" => 'new',
-			"int" => 45,
-		];
-		$this->entityHydrator->hydrate($entity, $data, ['string']);
-		Assert::same('default', $entity->getString());
-		Assert::same(45, $entity->getInt());
-	}
-
-	public function testHydrateCollections()
-	{
-		$entity = new RelationsEntity();
-		$entity->addMtmy($entity);
-		$data = [
-			'mtmies' => $entity
-		];
-		Assert::count(1, $entity->getMtmies());
-		$this->entityHydrator->hydrate($entity, $data);
-		Assert::count(2, $entity->getMtmies());
+		Assert::count(2, $entity->getToMany_s());
 	}
 }
 

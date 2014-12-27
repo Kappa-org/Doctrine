@@ -12,11 +12,8 @@
 
 namespace KappaTests\DoctrineHelpers;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Kappa\DoctrineHelpers\Entities\RelationsEntity;
-use Kappa\DoctrineHelpers\Helpers\EntityManipulator;
+use KappaTests\Entities\GlobalEntity;
 use Kappa\DoctrineHelpers\Reflections\EntityReflection;
-use KappaTests\Entities\StaticEntity;
 use Nette\DI\Container;
 use Tester\Assert;
 use Tester\TestCase;
@@ -38,138 +35,101 @@ class EntityManipulatorTest extends TestCase
 	{
 		$this->em = $container->getByType('Kdyby\Doctrine\EntityManager');
 	}
+
 	public function testInvoke()
 	{
-		$class = new TestClass();
+		$entity = new GlobalEntity();
 		$data = [
-			'one' => 'one',
-			'two' => 'two',
-			'categories' => $class,
-			'pub_categories' => $class,
-			'items' => $class,
-			'pub_items' => $class,
+			'column' => 'column',
+			'pub_column' => 'pub_column',
+			'column_s' => 'column_s',
+			'column_ies'=> 'column_ies',
+			'toOne' => $entity,
+			'pub_toOne' => $entity,
+			'toOne_s' => $entity,
+			'toOne_ies' => $entity,
+			'toMany_s' => $entity,
+			'toMany_ies' => $entity,
+			'pub_toMany_s' => $entity,
 		];
-		$entityReflection = new EntityReflection($this->em, $class);
-		$entityReflection->invoke('one', $data['one'], EntityReflection::SET_TYPE);
-		$entityReflection->invoke('two', $data['two'], EntityReflection::SET_TYPE);
-		$entityReflection->invoke('categories', $data['categories'], EntityReflection::ADD_TYPE);
-		$entityReflection->invoke('pub_categories', $data['pub_categories'], EntityReflection::ADD_TYPE);
-		$entityReflection->invoke('items', $data['items'], EntityReflection::ADD_TYPE);
-		$entityReflection->invoke('pub_items', $data['pub_items'], EntityReflection::ADD_TYPE);
-		Assert::same($data['one'], $class->getOne());
-		Assert::same($data['two'], $class->two);
-		Assert::count(1, $class->getCategories());
-		Assert::count(1, $class->getItems());
-		Assert::count(1, $class->pub_categories);
-		Assert::count(1, $class->pub_items);
+		$entityReflection = new EntityReflection($this->em, $entity);
+		$entityReflection->invoke('column', $data['column'], EntityReflection::SET_TYPE);
+		$entityReflection->invoke('pub_column', $data['pub_column'], EntityReflection::SET_TYPE);
+		$entityReflection->invoke('column_s', $data['column_s'], EntityReflection::SET_TYPE);
+		$entityReflection->invoke('column_ies', $data['column_ies'], EntityReflection::SET_TYPE);
+		$entityReflection->invoke('toOne', $data['toOne'], EntityReflection::SET_TYPE);
+		$entityReflection->invoke('pub_toOne', $data['pub_toOne'], EntityReflection::SET_TYPE);
+		$entityReflection->invoke('toOne_s', $data['toOne_s'], EntityReflection::SET_TYPE);
+		$entityReflection->invoke('toOne_ies', $data['toOne_ies'], EntityReflection::SET_TYPE);
+		$entityReflection->invoke('toMany_s', $data['toMany_s'], EntityReflection::ADD_TYPE);
+		$entityReflection->invoke('pub_toMany_s', $data['pub_toMany_s'], EntityReflection::ADD_TYPE);
+		$entityReflection->invoke('toMany_ies', $data['toMany_ies'], EntityReflection::ADD_TYPE);
+		Assert::same($data['column'], $entity->getColumn());
+		Assert::same($data['pub_column'], $entity->pub_column);
+		Assert::same($data['column_s'], $entity->getColumn_s());
+		Assert::same($data['column_ies'], $entity->getColumn_ies());
+		Assert::same($data['toOne'], $entity->getToOne());
+		Assert::same($data['pub_toOne'], $entity->pub_toOne);
+		Assert::same($data['toOne_s'], $entity->getToOne_s());
+		Assert::same($data['toOne_ies'], $entity->getToOne_s());
+		Assert::type('Doctrine\Common\Collections\Collection', $entity->getToMany_s());
+		Assert::type('Doctrine\Common\Collections\Collection', $entity->pub_toMany_s);
+		Assert::type('Doctrine\Common\Collections\Collection', $entity->getToMany_ies());
 	}
 
 	public function testGet()
 	{
-		$class = new TestClass();
-		$class->setOne('one');
-		$class->two = 'two';
-		$class->addCategory($class);
-		$class->addItem($class);
-		$class->pub_categories->add($class);
-		$class->pub_items->add($class);
-		$entityReflection = new EntityReflection($this->em, $class);
-		Assert::same('one', $entityReflection->get('one'));
-		Assert::same('two', $entityReflection->get('two'));
-		Assert::type('Doctrine\Common\Collections\Collection', $entityReflection->get('categories', false));
-		Assert::type('Doctrine\Common\Collections\Collection', $entityReflection->get('pub_categories', false));
-		Assert::true(is_array($entityReflection->get('items')));
-		Assert::true(is_array($entityReflection->get('pub_items', true)));
-		Assert::count(1, $entityReflection->get('categories'));
-		Assert::count(1, $entityReflection->get('pub_categories'));
-		Assert::count(1, $entityReflection->get('items'));
-		Assert::count(1, $entityReflection->get('pub_items'));
+		$entity = new GlobalEntity();
+		$entity->setColumn("column");
+		$entity->pub_column = "pub_column";
+		$entity->setColumn_s("column_s");
+		$entity->setColumn_ies("column_ies");
+		$entity->setToOne($entity);
+		$entity->pub_toOne = $entity;
+		$entity->setToOne_s($entity);
+		$entity->setToOne_ies($entity);
+		$entity->addToMany_($entity);
+		$entity->pub_toMany_s->add($entity);
+		$entity->addToMany_y($entity);
+		$entityReflection = new EntityReflection($this->em, $entity);
+		Assert::same('column', $entityReflection->get('column'));
+		Assert::same('pub_column', $entityReflection->get('pub_column'));
+		Assert::same('column_s', $entityReflection->get('column_s'));
+		Assert::same('column_ies', $entityReflection->get('column_ies'));
+		Assert::type('KappaTests\Entities\GlobalEntity', $entityReflection->get('toOne'));
+		Assert::type('KappaTests\Entities\GlobalEntity', $entityReflection->get('toOne_s'));
+		Assert::type('KappaTests\Entities\GlobalEntity', $entityReflection->get('toOne_ies'));
+		Assert::type('KappaTests\Entities\GlobalEntity', $entityReflection->get('pub_toOne'));
+		Assert::true(is_array($entityReflection->get('toMany_s')));
+		Assert::true(is_array($entityReflection->get('toMany_ies')));
+		Assert::true(is_array($entityReflection->get('pub_toMany_s')));
+		Assert::type('Doctrine\Common\Collections\Collection', $entityReflection->get('toMany_s', false));
+		Assert::type('Doctrine\Common\Collections\Collection', $entityReflection->get('toMany_ies', false));
+		Assert::type('Doctrine\Common\Collections\Collection', $entityReflection->get('pub_toMany_s', false));
 	}
 
 	public function testSetterType()
 	{
-		$entity = new RelationsEntity();
-		$entity_static = new StaticEntity();
+		$entity = new GlobalEntity();
 		$entityReflection = new EntityReflection($this->em, $entity);
-		$entityReflection_static = new EntityReflection($this->em, $entity_static);
-		Assert::same(EntityReflection::SET_TYPE, $entityReflection->getSetterType('oto'));
-		Assert::same(EntityReflection::SET_TYPE, $entityReflection->getSetterType('mto'));
-		Assert::same(EntityReflection::ADD_TYPE, $entityReflection->getSetterType('otms'));
-		Assert::same(EntityReflection::ADD_TYPE, $entityReflection->getSetterType('mtmies'));
-		Assert::same(EntityReflection::SET_TYPE, $entityReflection_static->getSetterType('oto'));
+		Assert::same(EntityReflection::SET_TYPE, $entityReflection->getSetterType('toOne'));
+		Assert::same(EntityReflection::SET_TYPE, $entityReflection->getSetterType('toOne_s'));
+		Assert::same(EntityReflection::SET_TYPE, $entityReflection->getSetterType('toOne_ies'));
+		Assert::same(EntityReflection::SET_TYPE, $entityReflection->getSetterType('pub_toOne'));
+		Assert::same(EntityReflection::SET_TYPE, $entityReflection->getSetterType('column'));
+		Assert::same(EntityReflection::SET_TYPE, $entityReflection->getSetterType('pub_column'));
+		Assert::same(EntityReflection::SET_TYPE, $entityReflection->getSetterType('column_s'));
+		Assert::same(EntityReflection::SET_TYPE, $entityReflection->getSetterType('column_ies'));
+		Assert::same(EntityReflection::ADD_TYPE, $entityReflection->getSetterType('toMany_s'));
+		Assert::same(EntityReflection::ADD_TYPE, $entityReflection->getSetterType('pub_toMany_s'));
+		Assert::same(EntityReflection::ADD_TYPE, $entityReflection->getSetterType('toMany_ies'));
 	}
 
 	public function testGetProperties()
 	{
-		$entity = new RelationsEntity();
-		$entity_static = new StaticEntity();
+		$entity = new GlobalEntity();
 		$entityReflection = new EntityReflection($this->em, $entity);
-		$entityReflection_static = new EntityReflection($this->em, $entity_static);
-		Assert::count(4, $entityReflection_static->getProperties());
-		Assert::count(6, $entityReflection->getProperties());
-	}
-}
-
-/**
- * Class TestClass
- *
- * @package Kappa\DoctrineHelpers\Tests
- * @author Ondřej Záruba <http://zaruba-ondrej.cz>
- */
-class TestClass
-{
-	private $one;
-
-	public $two;
-
-	/** @var ArrayCollection */
-	private $categories;
-
-	/** @var ArrayCollection */
-	private $items;
-
-	/** @var ArrayCollection  */
-	public $pub_categories;
-
-	/** @var ArrayCollection */
-	public $pub_items;
-
-	public function __construct()
-	{
-		$this->items = new ArrayCollection();
-		$this->pub_items= new ArrayCollection();
-		$this->categories = new ArrayCollection();
-		$this->pub_categories = new ArrayCollection();
-	}
-
-	public function setOne($one)
-	{
-		$this->one = $one;
-	}
-
-	public function getOne()
-	{
-		return $this->one;
-	}
-
-	public function addCategory($category)
-	{
-		$this->categories->add($category);
-	}
-
-	public function getCategories()
-	{
-		return $this->categories;
-	}
-
-	public function addItem($item)
-	{
-		$this->items->add($item);
-	}
-
-	public function getItems()
-	{
-		return $this->items;
+		Assert::count(12, $entityReflection->getProperties());
 	}
 }
 

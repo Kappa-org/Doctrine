@@ -14,8 +14,7 @@ if ((!$loader = @include __DIR__ . '/../../vendor/autoload.php') && (!$loader = 
 }
 $loader->add('KappaTests', __DIR__ . '/../');
 
-require __DIR__ . '/Entities/StaticEntity.php';
-require __DIR__ . '/Entities/RelationsEntity.php';
+require __DIR__ . '/Entities/GlobalEntity.php';
 
 // configure environment
 Tester\Environment::setup();
