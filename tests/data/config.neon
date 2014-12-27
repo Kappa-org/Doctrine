@@ -8,5 +8,5 @@ extensions:
 doctrine:
 	user: root
 	password: root
-	dbname:	test
+	dbname: test
 	driver: pdo_mysql
