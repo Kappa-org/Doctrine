@@ -19,12 +19,13 @@
     "php": ">= 5.4.0",
     "nette/di": "@dev",
     "nette/utils": "@dev",
-    "kdyby/doctrine": "@dev",
-    "kdyby/events": "@dev"
+    "doctrine/orm": ">=2.4.7,<2.6-dev"
   },
   "require-dev": {
     "nette/nette": "@dev",
-    "nette/tester": "@dev"
+    "nette/tester": "@dev",
+    "kdyby/doctrine": "@dev",
+    "kdyby/events": "@dev"
   },
   "autoload": {
     "psr-0": {

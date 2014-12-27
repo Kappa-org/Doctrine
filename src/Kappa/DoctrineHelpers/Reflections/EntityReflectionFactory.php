@@ -10,7 +10,7 @@
 
 namespace Kappa\DoctrineHelpers\Reflections;
 
-use Kdyby\Doctrine\EntityManager;
+use Doctrine\ORM\EntityManager;
 use Nette\Object;
 
 /**

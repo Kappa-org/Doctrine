@@ -11,9 +11,9 @@
 namespace Kappa\DoctrineHelpers\Reflections;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
-use Kdyby\Doctrine\EntityManager;
-use Kdyby\Doctrine\Mapping\ClassMetadata;
 use Nette\Object;
 use Nette\Utils\Callback;
 

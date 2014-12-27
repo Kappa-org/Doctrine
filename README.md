@@ -6,8 +6,8 @@ Collection of classes for better work with Doctrine
 
 * PHP 5.4 or higher
 * [Doctrine 2](http://www.doctrine-project.org/)
-* [Kdyby\Doctrine](https://github.com/Kdyby/Doctrine)
 * [Nette Framework](http://nette.org/)
+* [Kdyby\Doctrine](https://github.com/Kdyby/Doctrine) *(optional but recommended)*
 
 ## Installation:
 
