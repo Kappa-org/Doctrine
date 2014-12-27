@@ -10,7 +10,6 @@
 
 namespace Kappa\DoctrineHelpers\Hydrators;
 
-use Kappa\DoctrineHelpers\Helpers\EntityManipulator;
 use Kappa\DoctrineHelpers\Reflections\EntityReflectionFactory;
 use Nette\Object;
 
