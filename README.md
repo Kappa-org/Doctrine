@@ -50,9 +50,29 @@ $entity = new User();
 $entity->setNick('johnyX');
 $entityHydrator->hydrate($entity, $data);
 ```
-
 `EntityHydrator::hydrate()` requires two arguments and one optional. Option argument can be array of ignored keys in input array.
 
-For columns defined as Doctrine collections will be used `add()` method of the collection 
+For columns defined as Doctrine collections will be used `add()` method of the collection
+
+`EntityHydrator` contains support for automatically insert entity into relations by defined `targetEntity`
+
+#### Example
+
+**Database**
+id	| parent_id	|	name
+----|-----------|-------
+1	| NULL		| Johm
+
+**Usages**
+```php
+$entity = new Entity();
+$data = [
+	'name' => 'John junior',
+	'parent' => 1
+];
+$entityHydrator->hydrate($entity, $data);
+var_dump($entity->getParent()); // returns entity with id 1 and name John
+```
+If is column defined as relations and value is integer, will be automatically converted to entity from database and inserted into new entity
 
 
