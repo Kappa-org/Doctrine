@@ -1,3 +1,9 @@
+# This package will be removed! Some functions of this package will be moved into [Kappa\DoctrineHelpers pacakge](https://github.com/Kappa-org/DoctrineHelpers)
+please use this pacakge
+
+
+
+
 #Kappa\Doctrine
 
 Basic classes for working with [Doctrine 2](http://www.doctrine-project.org/) and [Nette Framework](http://nette.org)
