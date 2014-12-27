@@ -57,11 +57,7 @@ class EntityManipulator extends Object
 	{
 		$ref = new \ReflectionProperty($entity, $column);
 		if ($ref->isPublic()) {
-			if ($ref->getValue($entity) instanceof Collection) {
-				return $ref->getValue($entity)->toArray();
-			} else {
-				return $ref->getValue($entity);
-			}
+			return $ref->getValue($entity);
 		} else {
 			return Callback::invoke([$entity, $this->getMethodName(self::GET_TYPE, $column)]);
 		}
