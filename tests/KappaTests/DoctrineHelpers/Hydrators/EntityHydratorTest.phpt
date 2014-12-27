@@ -74,6 +74,19 @@ class EntityHydratorTest extends TestCase
 		Assert::count(1, $entity->getOtms());
 		Assert::count(1, $entity->getMtmies());
 	}
+
+	public function testIgnoreStatic()
+	{
+		$entity = new StaticEntity();
+		$entity->setString("default");
+		$data = [
+			"string" => 'new',
+			"int" => 45,
+		];
+		$this->entityHydrator->hydrate($entity, $data, ['string']);
+		Assert::same('default', $entity->getString());
+		Assert::same(45, $entity->getInt());
+	}
 }
 
 \run(new EntityHydratorTest(getContainer()));
