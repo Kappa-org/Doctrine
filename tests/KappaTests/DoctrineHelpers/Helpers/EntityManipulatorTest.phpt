@@ -10,11 +10,10 @@
  * @testCase
  */
 
-namespace Kappa\DoctrineHelpers\Tests;
+namespace KappaTests\DoctrineHelpers;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Kappa\DoctrineHelpers\Helpers\EntityManipulator;
-use Nette\DI\Container;
 use Tester\Assert;
 use Tester\TestCase;
 
