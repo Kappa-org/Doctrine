@@ -36,8 +36,26 @@ echo $data['name']; // returns "John"
 echo $data['email']; // returns "john@example.com"
 ```
 
-`ArrayHydrator::hydrate()` requires two arguments and two optionals arguments. First optional argument define ignored columns
-and second argument you can use for conversion Doctrine collections to array
+`ArrayHydrator::hydrate()` requires two arguments and three optionals arguments. First optional argument define ignored columns, 
+second argument you can use for conversion Doctrine collections to array and by last argument you can defined entity transformation.
+
+**Transformation example:**
+
+```php
+$article = new Article();
+$user = new User();
+$user->setName('John');
+$user->getId(); // returns 10
+
+$article->setTitle('Example article');
+$article->setUser($user);
+$data = [];
+$data_transform = [];
+$this->arrayHydrator->hydrate($data, $article);
+$this->arrayHydrator->hydrate($data_transform, $article, [], false, ['user' => 'id']);
+var_dump($data['user']); // returns object of User entity
+var_dump($data_transform['user']); // return 10 (id of User entity)
+```
 
 ### EntityHydrator
 

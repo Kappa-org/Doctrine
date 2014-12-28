@@ -108,7 +108,7 @@ class EntityReflection extends Object
 	 * @param bool $convertCollections
 	 * @return mixed
 	 */
-	public function get($column, $convertCollections = true)
+	public function get($column, $convertCollections = true, array $transformEntity = null)
 	{
 		$ref = new \ReflectionProperty($this->getEntityName(), $column);
 		if ($ref->isPublic()) {
@@ -119,6 +119,11 @@ class EntityReflection extends Object
 		if ($convertCollections && $retVal instanceof Collection) {
 			return $retVal->toArray();
 		} else {
+			if ($transformEntity !== null && array_key_exists($column, $transformEntity) && $this->isAssocMapping($column)) {
+				$entityReflection = new EntityReflection($this->entityManager, $retVal);
+
+				return $entityReflection->get($transformEntity[$column]);
+			}
 			return $retVal;
 		}
 	}
@@ -126,6 +131,15 @@ class EntityReflection extends Object
 	private function getEntityName()
 	{
 		return ClassUtils::getRealClass(get_class($this->entity));
+	}
+
+	/**
+	 * @param string $column
+	 * @return bool
+	 */
+	private function isAssocMapping($column)
+	{
+		return in_array($column, $this->entityManager->getClassMetadata($this->getEntityName())->getAssociationNames());
 	}
 
 	/**

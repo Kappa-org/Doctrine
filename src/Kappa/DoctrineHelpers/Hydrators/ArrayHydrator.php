@@ -37,13 +37,14 @@ class ArrayHydrator extends Object
 	 * @param object $entity
 	 * @param array $ignoreList
 	 * @param bool $convertCollections
+	 * @param array $transformEntity
 	 */
-	public function hydrate(array &$array, $entity, array $ignoreList = [], $convertCollections = true)
+	public function hydrate(array &$array, $entity, array $ignoreList = [], $convertCollections = true, array $transformEntity = null)
 	{
 		$entityReflection = $this->entityReflectionFactory->create($entity);
 		foreach ($entityReflection->getProperties() as $column) {
 			if (!in_array($column, $ignoreList)) {
-				$array[$column] = $entityReflection->get($column, $convertCollections);
+				$array[$column] = $entityReflection->get($column, $convertCollections, $transformEntity);
 			}
 		}
 	}

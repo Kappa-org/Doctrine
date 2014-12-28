@@ -90,6 +90,16 @@ class ArrayHydratorTest extends TestCase
 		Assert::same('column', $data['column']);
 		Assert::same('data', $data['no']);
 	}
+
+	public function testTransformEntity()
+	{
+		$entity = new GlobalEntity();
+		$entity->setColumn('column');
+		$entity->settoOne($entity);
+		$data = [];
+		$this->arrayHydrator->hydrate($data, $entity, [], false, ['toOne' => 'column']);
+		Assert::same('column', $data['toOne']);
+	}
 }
 
 \run(new ArrayHydratorTest(getContainer()));
