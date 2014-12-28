@@ -90,6 +90,7 @@ $array = [
 	'1' => 'John'
 ];
 ```
+*You can use entity object instead of namespace*
 
 You can change default columns via config
 ```yaml
