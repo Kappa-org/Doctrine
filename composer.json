@@ -31,5 +31,10 @@
     "psr-0": {
       "Kappa": "src/"
     }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.2-dev"
+    }
   }
 }
