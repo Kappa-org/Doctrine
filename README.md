@@ -87,7 +87,12 @@ $user = new User();
 $form->addSelect('parent', 'Parent item: ', $this->formItemsCreator->create($user, new GetAll());
 ```
 
-`$this->formItemsCreator->create('\UserEntity', new GetAll());` use default columns `id` and `title` and create array like this
+```php
+$this->formItemsCreator->create('\UserEntity', new GetAll());
+``` 
+
+use default columns `id` and `title` and create array like this
+
 ```php
 $array = [
 	'1' => 'John'
@@ -103,4 +108,7 @@ doctrineHelpers:
 			valueColumn: name
 ```
 
-or as a third and fourth argument `$this->formItemsCreator->create('\UserEntity', new GetAll(), 'id', 'name');`
+or as a third and fourth argument 
+```php
+$this->formItemsCreator->create('\UserEntity', new GetAll(), 'id', 'name');
+```
