@@ -11,8 +11,10 @@
 namespace Kappa\DoctrineHelpers\Reflections;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\ORM\Proxy\Proxy;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Object;
 use Nette\Utils\Callback;
@@ -52,7 +54,7 @@ class EntityReflection extends Object
 	 */
 	public function getProperties()
 	{
-		$mapping = $this->entityManager->getClassMetadata($this->getEntityClass());
+		$mapping = $this->entityManager->getClassMetadata($this->getEntityName());
 
 		return array_merge($mapping->getFieldNames(), $mapping->getAssociationNames());
 	}
@@ -63,7 +65,7 @@ class EntityReflection extends Object
 	 */
 	public function getSetterType($columnName)
 	{
-		$metadata = $this->entityManager->getClassMetadata($this->getEntityClass());
+		$metadata = $this->entityManager->getClassMetadata($this->getEntityName());
 		try {
 			$assoc = $metadata->getAssociationMapping($columnName);
 			if ($assoc['type'] == ClassMetadata::ONE_TO_ONE || $assoc['type'] == ClassMetadata::MANY_TO_ONE) {
@@ -83,13 +85,13 @@ class EntityReflection extends Object
 	 */
 	public function invoke($column, $value, $type)
 	{
-		$metadata = $this->entityManager->getClassMetadata($this->getEntityClass());
+		$metadata = $this->entityManager->getClassMetadata($this->getEntityName());
 		if (in_array($column, $metadata->getAssociationNames()) && is_numeric($value)) {
 			$dao = $this->entityManager->getDao($metadata->getAssociationMapping($column)['targetEntity']);
 			$targetEntity = $dao->find($value);
 			$value = $targetEntity;
 		}
-		$ref = new \ReflectionProperty($this->entity, $column);
+		$ref = new \ReflectionProperty($this->getEntityName(), $column);
 		if ($ref->isPublic()) {
 			if ($ref->getValue($this->entity) instanceof Collection) {
 				$ref->getValue($this->entity)->add($value);
@@ -108,7 +110,7 @@ class EntityReflection extends Object
 	 */
 	public function get($column, $convertCollections = true)
 	{
-		$ref = new \ReflectionProperty($this->entity, $column);
+		$ref = new \ReflectionProperty($this->getEntityName(), $column);
 		if ($ref->isPublic()) {
 			$retVal =  $ref->getValue($this->entity);
 		} else {
@@ -121,12 +123,9 @@ class EntityReflection extends Object
 		}
 	}
 
-	/**
-	 * @return string
-	 */
-	private function getEntityClass()
+	private function getEntityName()
 	{
-		return get_class($this->entity);
+		return ClassUtils::getRealClass(get_class($this->entity));
 	}
 
 	/**
