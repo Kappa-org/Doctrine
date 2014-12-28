@@ -82,6 +82,9 @@ If is column defined as relations and value is integer, will be automatically co
 ```php
 $form = new Form();
 $form->addSelect('parent', 'Parent item: ', $this->formItemsCreator->create('\UserEntity', new GetAll());
+// or
+$user = new User();
+$form->addSelect('parent', 'Parent item: ', $this->formItemsCreator->create($user, new GetAll());
 ```
 
 `$this->formItemsCreator->create('\UserEntity', new GetAll());` use default columns `id` and `title` and create array like this
@@ -90,7 +93,6 @@ $array = [
 	'1' => 'John'
 ];
 ```
-*You can use entity object instead of namespace*
 
 You can change default columns via config
 ```yaml
