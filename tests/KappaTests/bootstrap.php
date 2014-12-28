@@ -16,6 +16,7 @@ $loader->add('KappaTests', __DIR__ . '/../');
 
 require __DIR__ . '/Entities/GlobalEntity.php';
 require __DIR__ . '/Entities/RelationIdEntity.php';
+require __DIR__ . '/Entities/FormItemsEntity.php';
 
 // configure environment
 Tester\Environment::setup();
