@@ -51,7 +51,7 @@ class FormItemsCreator extends Object
 	 * @param string|null $valueColumn
 	 * @return array
 	 */
-	public function create($entity, QueryObject $queryObject, $identifierColumn = null, $valueColumn = null)
+	public function create($entity, QueryObject $queryObject, $valueColumn = null, $identifierColumn = null)
 	{
 		if (is_object($entity)) {
 			$entity = get_class($entity);

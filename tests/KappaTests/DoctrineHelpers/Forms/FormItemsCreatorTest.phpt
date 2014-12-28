@@ -65,7 +65,7 @@ class FormItemsCreatorTest extends TestCase
 
 	public function testColumnNames()
 	{
-		$data = $this->formItemCreator->create(new FormItemsEntity(), new GetAll(), 'name', 'title');
+		$data = $this->formItemCreator->create(new FormItemsEntity(), new GetAll(), 'title', 'name');
 		Assert::count(1, $data);
 		Assert::true(array_key_exists('John_name', $data));
 		Assert::same('John_title', $data['John_name']);
