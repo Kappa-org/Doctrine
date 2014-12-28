@@ -15,3 +15,12 @@ ADD FOREIGN KEY (`parent_id`) REFERENCES `relations_id` (`id`);
 
 INSERT INTO `relations_id` (`parent_id`)
 VALUES (NULL);
+
+CREATE TABLE `form_items` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `title` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE='InnoDB' COLLATE 'utf8_czech_ci';
+
+INSERT INTO `form_items` (`title`, `name`)
+VALUES ('John_title', 'John_name');
