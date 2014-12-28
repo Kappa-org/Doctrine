@@ -77,3 +77,27 @@ var_dump($entity->getParent()); // returns entity with id 1 and name John
 If is column defined as relations and value is integer, will be automatically converted to entity from database and inserted into new entity
 
 
+### FormItemsCreator
+
+```php
+$form = new Form();
+$form->addSelect('parent', 'Parent item: ', $this->formItemsCreator->create('\UserEntity', new GetAll());
+```
+
+`$this->formItemsCreator->create('\UserEntity', new GetAll());` use default columns `id` and `title` and create array like this
+```php
+$array = [
+	'1' => 'John'
+];
+```
+
+You can change default columns via config
+```yaml
+doctrineHelpers:
+	forms:
+		items:
+			identifierColumn: id
+			valueColumn: name
+```
+
+or as a third and fourth argument `$this->formItemsCreator->create('\UserEntity', new GetAll(), 'id', 'name');`
