@@ -42,8 +42,8 @@ class DoctrineHelpersExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$builder->addDefinition($this->prefix('formItemsCreator'))
 			->setClass('Kappa\DoctrineHelpers\Forms\FormItemsCreator', [
-				'...',
-				'...',
+				'@doctrine.default.entityManager',
+				$this->prefix('@entityReflectionFactory'),
 				$config['items']
 			]);
 	}
