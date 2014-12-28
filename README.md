@@ -110,5 +110,7 @@ doctrineHelpers:
 
 or as a third and fourth argument 
 ```php
-$this->formItemsCreator->create('\UserEntity', new GetAll(), 'id', 'name');
+$this->formItemsCreator->create('\UserEntity', new GetAll(), 'name', 'id');
 ```
+
+Third argument is `valueColumn` and last argument is `identifierColumn`
