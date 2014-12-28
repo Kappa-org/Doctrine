@@ -20,10 +20,32 @@ use Nette\DI\CompilerExtension;
  */
 class DoctrineHelpersExtension extends CompilerExtension
 {
+	private $defaultConfig = [
+		'forms' => [
+			'items' => [
+				'identifierColumn' => 'id',
+				'valueColumn' => 'title'
+			]
+		]
+	];
+
 	public function loadConfiguration()
 	{
+		$config = $this->getConfig($this->defaultConfig);
+		$this->processForms($config['forms']);
 		$this->processReflections();
 		$this->processHydrators();
+	}
+
+	private function processForms($config)
+	{
+		$builder = $this->getContainerBuilder();
+		$builder->addDefinition($this->prefix('formItemsCreator'))
+			->setClass('Kappa\DoctrineHelpers\Forms\FormItemsCreator', [
+				'...',
+				'...',
+				$config['items']
+			]);
 	}
 
 	private function processHydrators()

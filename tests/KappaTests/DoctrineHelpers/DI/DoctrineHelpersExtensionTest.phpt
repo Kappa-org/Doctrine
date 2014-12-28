@@ -48,6 +48,12 @@ class DoctrineHelpersExtensionTest extends TestCase
 		Assert::type($types['array'], $this->container->getByType($types['array']));
 		Assert::type($types['entity'], $this->container->getByType($types['entity']));
 	}
+
+	public function testForms()
+	{
+		$type = 'Kappa\DoctrineHelpers\Forms\FormItemsCreator';
+		Assert::type($type, $this->container->getByType($type));
+	}
 }
 
 \run(new DoctrineHelpersExtensionTest(getContainer()));
