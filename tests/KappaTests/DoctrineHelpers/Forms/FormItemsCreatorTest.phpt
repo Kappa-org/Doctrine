@@ -47,6 +47,14 @@ class FormItemsCreatorTest extends TestCase
 		]);
 	}
 
+	public function testStringEntity()
+	{
+		$data = $this->formItemCreator->create(FormItemsEntity::getClassName(), new GetAll());
+		Assert::count(1, $data);
+		Assert::true(array_key_exists(1, $data));
+		Assert::same('John_name', $data[1]);
+	}
+
 	public function testDefault()
 	{
 		$data = $this->formItemCreator->create(new FormItemsEntity(), new GetAll());

@@ -45,7 +45,7 @@ class FormItemsCreator extends Object
 	}
 
 	/**
-	 * @param object $entity
+	 * @param string|object $entity
 	 * @param QueryObject $queryObject
 	 * @param string|null $identifierColumn
 	 * @param string|null $valueColumn
@@ -53,7 +53,10 @@ class FormItemsCreator extends Object
 	 */
 	public function create($entity, QueryObject $queryObject, $identifierColumn = null, $valueColumn = null)
 	{
-		$dao = $this->entityManager->getDao(get_class($entity));
+		if (is_object($entity)) {
+			$entity = get_class($entity);
+		}
+		$dao = $this->entityManager->getDao($entity);
 		$items = [];
 		foreach ($dao->fetch($queryObject) as $item) {
 			$entityReflection = $this->entityReflectionManager->create($item);
