@@ -119,7 +119,7 @@ class EntityReflection extends Object
 		if ($convertCollections && $retVal instanceof Collection) {
 			return $retVal->toArray();
 		} else {
-			if ($transformEntity !== null && array_key_exists($column, $transformEntity) && $this->isAssocMapping($column)) {
+			if ($transformEntity !== null && array_key_exists($column, $transformEntity) && $this->isAssocMapping($column) && $retVal !== null) {
 				$entityReflection = new EntityReflection($this->entityManager, $retVal);
 
 				return $entityReflection->get($transformEntity[$column]);
