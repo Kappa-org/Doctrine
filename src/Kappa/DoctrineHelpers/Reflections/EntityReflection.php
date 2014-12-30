@@ -128,6 +128,9 @@ class EntityReflection extends Object
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	private function getEntityName()
 	{
 		return ClassUtils::getRealClass(get_class($this->entity));
