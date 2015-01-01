@@ -10,14 +10,11 @@
  * @testCase
  */
 
-namespace KappaTests\DoctrineHelpers;
+namespace Kappa\DoctrineHelpers\Tests;
 
-use Kappa\DoctrineHelpers\Entities\RelationsEntity;
-use Kappa\DoctrineHelpers\Helpers\EntityManipulator;
-use Kappa\DoctrineHelpers\Hydrators\ArrayHydrator;
+use Kappa\DoctrineHelpers\Converters\EntityArrayConverter;
 use Kappa\DoctrineHelpers\Reflections\EntityReflectionFactory;
 use KappaTests\Entities\GlobalEntity;
-use KappaTests\Entities\StaticEntity;
 use Nette\DI\Container;
 use Tester\Assert;
 use Tester\TestCase;
@@ -25,15 +22,15 @@ use Tester\TestCase;
 require_once __DIR__ . '/../../bootstrap.php';
 
 /**
- * Class ArrayHydratorTest
+ * Class EntityArrayConverter_EntityToArrayTest
  *
- * @package KappaTests\DoctrineHelpers
+ * @package Kappa\DoctrineHelpers\Tests
  * @author Ondřej Záruba <http://zaruba-ondrej.cz>
  */
-class ArrayHydratorTest extends TestCase
+class EntityArrayConverter_EntityToArrayTest extends TestCase
 {
-	/** @var ArrayHydrator */
-	private $arrayHydrator;
+	/** @var EntityArrayConverter */
+	private $entityArrayConverter;
 
 	/**
 	 * @param Container $container
@@ -41,7 +38,7 @@ class ArrayHydratorTest extends TestCase
 	public function __construct(Container $container)
 	{
 		$em = $container->getByType('Kdyby\Doctrine\EntityManager');
-		$this->arrayHydrator = new ArrayHydrator(new EntityReflectionFactory($em));
+		$this->entityArrayConverter = new EntityArrayConverter(new EntityReflectionFactory($em));
 	}
 
 	public function testBasicHydrate()
@@ -50,8 +47,7 @@ class ArrayHydratorTest extends TestCase
 		$entity->addToMany_($entity);
 		$entity->addToMany_y($entity);
 		$entity->pub_column = 'pub_column';
-		$data = [];
-		$this->arrayHydrator->hydrate($data, $entity);
+		$data = $this->entityArrayConverter->entityToArray($entity);
 		Assert::same('pub_column', $data['pub_column']);
 		Assert::true(is_array($data['toMany_ies']));
 		Assert::true(is_array($data['toMany_s']));
@@ -62,8 +58,7 @@ class ArrayHydratorTest extends TestCase
 		$entity = new GlobalEntity();
 		$entity->addToMany_($entity);
 		$entity->addToMany_y($entity);
-		$data = [];
-		$this->arrayHydrator->hydrate($data, $entity, [], false);
+		$data = $this->entityArrayConverter->entityToArray($entity, [], false);
 		Assert::type('Doctrine\Common\Collections\Collection', $data['toMany_ies']);
 		Assert::type('Doctrine\Common\Collections\Collection', $data['toMany_s']);
 	}
@@ -72,23 +67,8 @@ class ArrayHydratorTest extends TestCase
 	{
 		$entity = new GlobalEntity();
 		$entity->setColumn('column');
-		$data = [
-			'column' => 'data'
-		];
-		$this->arrayHydrator->hydrate($data, $entity, ['column']);
-		Assert::same('data', $data['column']);
-	}
-
-	public function testDefault()
-	{
-		$entity = new GlobalEntity();
-		$entity->setColumn('column');
-		$data = [
-			'no' => 'data'
-		];
-		$this->arrayHydrator->hydrate($data, $entity);
-		Assert::same('column', $data['column']);
-		Assert::same('data', $data['no']);
+		$data = $this->entityArrayConverter->entityToArray($entity, ['column']);
+		Assert::false(array_key_exists('column', $data));
 	}
 
 	public function testTransformEntity()
@@ -96,10 +76,9 @@ class ArrayHydratorTest extends TestCase
 		$entity = new GlobalEntity();
 		$entity->setColumn('column');
 		$entity->settoOne($entity);
-		$data = [];
-		$this->arrayHydrator->hydrate($data, $entity, [], false, ['toOne' => 'column']);
+		$data = $this->entityArrayConverter->entityToArray($entity, [], false, ['toOne' => 'column']);
 		Assert::same('column', $data['toOne']);
 	}
 }
 
-\run(new ArrayHydratorTest(getContainer()));
+\run(new EntityArrayConverter_EntityToArrayTest(getContainer()));

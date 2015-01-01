@@ -8,20 +8,21 @@
  * file that was distributed with this source code.
  */
 
-namespace Kappa\DoctrineHelpers\Hydrators;
+namespace Kappa\DoctrineHelpers\Converters;
 
+use Kappa\DoctrineHelpers\Reflections\EntityReflection;
 use Kappa\DoctrineHelpers\Reflections\EntityReflectionFactory;
 use Nette\Object;
 
 /**
- * Class EntityHydrator
+ * Class EntityArrayConverter
  *
- * @package Kappa\DoctrineHelpers\Hydrators
+ * @package Kappa\DoctrineHelpers\Converters
  * @author Ondřej Záruba <http://zaruba-ondrej.cz>
  */
-class EntityHydrator extends Object
+class EntityArrayConverter extends Object
 {
-	/** @var EntityReflectionFactory */
+	/** @var EntityReflection */
 	private $entityReflectionFactory;
 
 	/**
@@ -36,8 +37,9 @@ class EntityHydrator extends Object
 	 * @param object $entity
 	 * @param array $values
 	 * @param array $ignoreList
+	 * @return object
 	 */
-	public function hydrate($entity, array $values, array $ignoreList = [])
+	public function arrayToEntity($entity, array $values, array $ignoreList = [])
 	{
 		$entityReflection = $this->entityReflectionFactory->create($entity);
 		foreach ($values as $column => $value) {
@@ -46,5 +48,27 @@ class EntityHydrator extends Object
 				$entityReflection->invoke($column, $values[$column], $type);
 			}
 		}
+
+		return $entityReflection->getEntity();
+	}
+
+	/**
+	 * @param object $entity
+	 * @param array $ignoreList
+	 * @param bool $convertCollections
+	 * @param array $transformEntity
+	 * @return array
+	 */
+	public function entityToArray($entity, array $ignoreList = [], $convertCollections = true, array $transformEntity = null)
+	{
+		$entityReflection = $this->entityReflectionFactory->create($entity);
+		$array = [];
+		foreach ($entityReflection->getProperties() as $column) {
+			if (!in_array($column, $ignoreList)) {
+				$array[$column] = $entityReflection->get($column, $convertCollections, $transformEntity);
+			}
+		}
+
+		return $array;
 	}
 }

@@ -46,6 +46,10 @@ class EntityReflection extends Object
 	public function __construct(EntityManager $entityManager, $entity)
 	{
 		$this->entityManager = $entityManager;
+		if (is_string($entity)) {
+			$classRef = new \ReflectionClass($entity);
+			$entity = $classRef->newInstance();
+		}
 		$this->entity = $entity;
 	}
 
@@ -126,6 +130,14 @@ class EntityReflection extends Object
 			}
 			return $retVal;
 		}
+	}
+
+	/**
+	 * @return object
+	 */
+	public function getEntity()
+	{
+		return $this->entity;
 	}
 
 	/**

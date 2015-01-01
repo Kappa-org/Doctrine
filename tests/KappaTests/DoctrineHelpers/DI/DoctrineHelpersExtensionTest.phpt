@@ -39,14 +39,10 @@ class DoctrineHelpersExtensionTest extends TestCase
 		Assert::type($type, $this->container->getByType($type));
 	}
 
-	public function testHydrators()
+	public function testConverters()
 	{
-		$types = [
-			'array' => 'Kappa\DoctrineHelpers\Hydrators\ArrayHydrator',
-			'entity' => 'Kappa\DoctrineHelpers\Hydrators\EntityHydrator',
-		];
-		Assert::type($types['array'], $this->container->getByType($types['array']));
-		Assert::type($types['entity'], $this->container->getByType($types['entity']));
+		$type = 'Kappa\DoctrineHelpers\Converters\EntityArrayConverter';
+		Assert::type($type, $this->container->getByType($type));
 	}
 
 	public function testForms()

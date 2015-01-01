@@ -34,7 +34,7 @@ class DoctrineHelpersExtension extends CompilerExtension
 		$config = $this->getConfig($this->defaultConfig);
 		$this->processForms($config['forms']);
 		$this->processReflections();
-		$this->processHydrators();
+		$this->processConverters();
 	}
 
 	private function processForms($config)
@@ -48,13 +48,11 @@ class DoctrineHelpersExtension extends CompilerExtension
 			]);
 	}
 
-	private function processHydrators()
+	private function processConverters()
 	{
 		$builder = $this->getContainerBuilder();
-		$builder->addDefinition($this->prefix('entityHydrator'))
-			->setClass('Kappa\DoctrineHelpers\Hydrators\EntityHydrator');
-		$builder->addDefinition($this->prefix('arrayHydrator'))
-			->setClass('Kappa\DoctrineHelpers\Hydrators\ArrayHydrator');
+		$builder->addDefinition($this->prefix('entityArrayConverter'))
+			->setClass('Kappa\DoctrineHelpers\Converters\EntityArrayConverter');
 	}
 
 	private function processReflections()

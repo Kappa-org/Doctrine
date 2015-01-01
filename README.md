@@ -21,22 +21,18 @@ $ composer require kappa/doctrine-helpers:@dev
 
 ## Usages
 
-### ArrayHydrator
+### EntityArrayConverter::entityToArray()
 
 ```php
-$data = [
-	'defaultValue' => 'Test'
-];
 $entity = new User();
 $entity->setName('John')
 	->setEmail('john@example.com');
-$arrayHydrator->hydrate($data, $entity);
-echo $data['defaultValue'] // returns "Test"
+$data = $entityArrayConverter->entityToArray($entity);
 echo $data['name']; // returns "John"
 echo $data['email']; // returns "john@example.com"
 ```
 
-`ArrayHydrator::hydrate()` requires two arguments and three optionals arguments. First optional argument define ignored columns, 
+`EntityArrayConverter::entityToArray()` requires one argument and three optionals arguments. First optional argument define ignored columns, 
 second argument you can use for conversion Doctrine collections to array and by last argument you can defined entity transformation.
 
 **Transformation example:**
@@ -49,15 +45,13 @@ $user->getId(); // returns 10
 
 $article->setTitle('Example article');
 $article->setUser($user);
-$data = [];
-$data_transform = [];
-$this->arrayHydrator->hydrate($data, $article);
-$this->arrayHydrator->hydrate($data_transform, $article, [], false, ['user' => 'id']);
+$data = $this->entityArrayConverter->entityToArray($article);
+$data_transform = $this->entityArrayConverter->entityToArray($article, [], false, ['user' => 'id']);
 var_dump($data['user']); // returns object of User entity
 var_dump($data_transform['user']); // return 10 (id of User entity)
 ```
 
-### EntityHydrator
+### EntityArrayConverter::arrayToEntity()
 
 ```php
 $data = [
@@ -66,13 +60,15 @@ $data = [
 ];
 $entity = new User();
 $entity->setNick('johnyX');
-$entityHydrator->hydrate($entity, $data);
+$entityArrayConverter->arrayToEntity($entity, $data);
+// or
+$entity = $entityArrayConverter->arrayToEntity('Example\Namespace\User', $data);
 ```
-`EntityHydrator::hydrate()` requires two arguments and one optional. Option argument can be array of ignored keys in input array.
+`EntityArrayConverter::arrayToEntity()` requires two arguments and one optional. Option argument can be array of ignored keys in input array.
 
 For columns defined as Doctrine collections will be used `add()` method of the collection
 
-`EntityHydrator` contains support for automatically insert entity into relations by defined `targetEntity`
+`EntityArrayConverter::arrayToEntity()` contains support for automatically insert entity into relations by defined `targetEntity`
 
 #### Example
 
@@ -84,12 +80,11 @@ id  | parent_id | name
 
 **Usages**
 ```php
-$entity = new Entity();
 $data = [
 	'name' => 'John junior',
 	'parent' => 1
 ];
-$entityHydrator->hydrate($entity, $data);
+$entity = $entityArrayConverter->arrayToEntity('Example\Namespace\User', $data);
 var_dump($entity->getParent()); // returns entity with id 1 and name John
 ```
 If is column defined as relations and value is integer, will be automatically converted to entity from database and inserted into new entity
