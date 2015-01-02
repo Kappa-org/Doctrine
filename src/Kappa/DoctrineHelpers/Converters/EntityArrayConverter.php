@@ -10,6 +10,7 @@
 
 namespace Kappa\DoctrineHelpers\Converters;
 
+use Kappa\DoctrineHelpers\InvalidArgumentException;
 use Kappa\DoctrineHelpers\Reflections\EntityReflection;
 use Kappa\DoctrineHelpers\Reflections\EntityReflectionFactory;
 use Nette\Object;
@@ -61,6 +62,9 @@ class EntityArrayConverter extends Object
 	 */
 	public function entityToArray($entity, array $ignoreList = [], $convertCollections = true, array $transformEntity = null)
 	{
+		if (!is_object($entity)) {
+			throw new InvalidArgumentException(__METHOD__ . ": first argument must be object");
+		}
 		$entityReflection = $this->entityReflectionFactory->create($entity);
 		$array = [];
 		foreach ($entityReflection->getProperties() as $column) {

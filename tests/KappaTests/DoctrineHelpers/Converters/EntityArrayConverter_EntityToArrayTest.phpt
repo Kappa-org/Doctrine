@@ -51,6 +51,9 @@ class EntityArrayConverter_EntityToArrayTest extends TestCase
 		Assert::same('pub_column', $data['pub_column']);
 		Assert::true(is_array($data['toMany_ies']));
 		Assert::true(is_array($data['toMany_s']));
+		Assert::throws(function() {
+			$this->entityArrayConverter->entityToArray('KappaTests\Entities\GlobalEntity');
+		}, 'Kappa\DoctrineHelpers\InvalidArgumentException');
 	}
 
 	public function testCollectionHydrate()
