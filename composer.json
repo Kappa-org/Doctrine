@@ -30,7 +30,10 @@
   "autoload": {
     "psr-0": {
       "Kappa": "src/"
-    }
+    },
+    "classmap": [
+      "src/Kappa/DoctrineHelpers/exceptions.php"
+    ]
   },
   "extra": {
     "branch-alias": {
