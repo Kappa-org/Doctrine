@@ -35,7 +35,7 @@ class EntityArrayConverter extends Object
 	}
 
 	/**
-	 * @param object $entity
+	 * @param object|string $entity
 	 * @param array $values
 	 * @param array $ignoreList
 	 * @return object
