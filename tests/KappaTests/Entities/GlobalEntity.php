@@ -19,7 +19,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @ORM\Entity
  * @ORM\Table(name="globals")
  */
-class GlobalEntity extends BaseEntity
+class GlobalEntity extends BaseEntity implements IEntity
 {
 	use Identifier;
 

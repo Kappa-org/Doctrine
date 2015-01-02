@@ -36,21 +36,23 @@ class EntityReflection extends Object
 	/** @var EntityManager */
 	private $entityManager;
 
-	/** @var object */
-	private $entity;
+	/** @var ClassMetadata */
+	private $metadata;
+
+	/** @var null|object */
+	private $entity = null;
 
 	/**
 	 * @param EntityManager $entityManager
-	 * @param object $entity
+	 * @param object|string $entity
 	 */
 	public function __construct(EntityManager $entityManager, $entity)
 	{
 		$this->entityManager = $entityManager;
-		if (is_string($entity)) {
-			$classRef = new \ReflectionClass($entity);
-			$entity = $classRef->newInstance();
+		$this->metadata = $this->getMetadata($entity);
+		if (is_object($entity)) {
+			$this->entity = $entity;
 		}
-		$this->entity = $entity;
 	}
 
 	/**
@@ -58,9 +60,7 @@ class EntityReflection extends Object
 	 */
 	public function getProperties()
 	{
-		$mapping = $this->entityManager->getClassMetadata($this->getEntityName());
-
-		return array_merge($mapping->getFieldNames(), $mapping->getAssociationNames());
+		return array_merge($this->metadata->getFieldNames(), $this->metadata->getAssociationNames());
 	}
 
 	/**
@@ -69,9 +69,8 @@ class EntityReflection extends Object
 	 */
 	public function getSetterType($columnName)
 	{
-		$metadata = $this->entityManager->getClassMetadata($this->getEntityName());
 		try {
-			$assoc = $metadata->getAssociationMapping($columnName);
+			$assoc = $this->metadata->getAssociationMapping($columnName);
 			if ($assoc['type'] == ClassMetadata::ONE_TO_ONE || $assoc['type'] == ClassMetadata::MANY_TO_ONE) {
 				return self::SET_TYPE;
 			} else {
@@ -89,7 +88,7 @@ class EntityReflection extends Object
 	 */
 	public function invoke($column, $value, $type)
 	{
-		$metadata = $this->entityManager->getClassMetadata($this->getEntityName());
+		$metadata = $this->metadata;
 		if (in_array($column, $metadata->getAssociationNames()) && is_numeric($value)) {
 			$dao = $this->entityManager->getDao($metadata->getAssociationMapping($column)['targetEntity']);
 			$targetEntity = $dao->find($value);
@@ -97,28 +96,29 @@ class EntityReflection extends Object
 		}
 		$ref = new \ReflectionProperty($this->getEntityName(), $column);
 		if ($ref->isPublic()) {
-			if ($ref->getValue($this->entity) instanceof Collection) {
-				$ref->getValue($this->entity)->add($value);
+			if ($ref->getValue($this->getEntity()) instanceof Collection) {
+				$ref->getValue($this->getEntity())->add($value);
 			} else {
-				$ref->setValue($this->entity, $value);
+				$ref->setValue($this->getEntity(), $value);
 			}
 		} else {
-			Callback::invokeArgs([$this->entity, $this->getMethodName($type, $column)], [$value]);
+			Callback::invokeArgs([$this->getEntity(), $this->getMethodName($type, $column)], [$value]);
 		}
 	}
 
 	/**
 	 * @param string $column
 	 * @param bool $convertCollections
-	 * @return mixed
+	 * @param array $transformEntity
+	 * @return array|null
 	 */
 	public function get($column, $convertCollections = true, array $transformEntity = null)
 	{
 		$ref = new \ReflectionProperty($this->getEntityName(), $column);
 		if ($ref->isPublic()) {
-			$retVal =  $ref->getValue($this->entity);
+			$retVal =  $ref->getValue($this->getEntity());
 		} else {
-			$retVal = Callback::invoke([$this->entity, $this->getMethodName(self::GET_TYPE, $column)]);
+			$retVal = Callback::invoke([$this->getEntity(), $this->getMethodName(self::GET_TYPE, $column)]);
 		}
 		if ($convertCollections && $retVal instanceof Collection) {
 			return $retVal->toArray();
@@ -137,6 +137,11 @@ class EntityReflection extends Object
 	 */
 	public function getEntity()
 	{
+		if ($this->entity === null) {
+			$reflectionClass = new \ReflectionClass($this->metadata->name);
+			$this->entity = $reflectionClass->newInstance();
+		}
+
 		return $this->entity;
 	}
 
@@ -145,7 +150,7 @@ class EntityReflection extends Object
 	 */
 	private function getEntityName()
 	{
-		return ClassUtils::getRealClass(get_class($this->entity));
+		return $this->metadata->name;
 	}
 
 	/**
@@ -154,7 +159,7 @@ class EntityReflection extends Object
 	 */
 	private function isAssocMapping($column)
 	{
-		return in_array($column, $this->entityManager->getClassMetadata($this->getEntityName())->getAssociationNames());
+		return in_array($column, $this->metadata->getAssociationNames());
 	}
 
 	/**
@@ -175,5 +180,20 @@ class EntityReflection extends Object
 		$name .= ucfirst($column);
 
 		return $name;
+	}
+
+	/**
+	 * @param string|object $entity
+	 * @return ClassMetadata
+	 */
+	private function getMetadata($entity)
+	{
+		if (is_object($entity)) {
+			$entity = get_class($entity);
+		}
+
+		$entity = ClassUtils::getRealClass($entity);
+
+		return $this->entityManager->getClassMetadata($entity);
 	}
 }

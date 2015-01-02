@@ -131,6 +131,22 @@ class EntityManipulatorTest extends TestCase
 		$entityReflection = new EntityReflection($this->em, $entity);
 		Assert::count(12, $entityReflection->getProperties());
 	}
+
+	public function testGetEntity()
+	{
+		$entityReflection = new EntityReflection($this->em, 'KappaTests\Entities\IEntity');
+		Assert::type('KappaTests\Entities\GlobalEntity', $entityReflection->getEntity());
+		$entityReflection = new EntityReflection($this->em, 'KappaTests\Entities\GlobalEntity');
+		Assert::type('KappaTests\Entities\GlobalEntity', $entityReflection->getEntity());
+	}
+
+	public function testInterfaceAccess()
+	{
+		$entityReflection = new EntityReflection($this->em, 'KappaTests\Entities\IEntity');
+		Assert::type('KappaTests\Entities\GlobalEntity', $entityReflection->getEntity());
+		$entityReflection->invoke('column', 'column', EntityReflection::SET_TYPE);
+		Assert::same('column', $entityReflection->getEntity()->getColumn());
+	}
 }
 
 \run(new EntityManipulatorTest(getContainer()));

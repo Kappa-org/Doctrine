@@ -120,6 +120,14 @@ class EntityArrayConverter_ArrayToEntityTest extends TestCase
 		$entity = $this->entityArrayConverter->arrayToEntity($entity, $data);
 		Assert::type('KappaTests\Entities\RelationIdEntity', $entity->getParent());
 	}
+
+	public function testInterface()
+	{
+		$data['column'] = 'column';
+		$entity = $this->entityArrayConverter->arrayToEntity('KappaTests\Entities\IEntity', $data);
+		Assert::type('KappaTests\Entities\GlobalEntity', $entity);
+		Assert::same('column', $entity->getColumn());
+	}
 }
 
 \run(new EntityArrayConverter_ArrayToEntityTest(getContainer()));
