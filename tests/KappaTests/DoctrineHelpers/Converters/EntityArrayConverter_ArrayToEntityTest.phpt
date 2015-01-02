@@ -117,8 +117,8 @@ class EntityArrayConverter_ArrayToEntityTest extends TestCase
 		$data = [
 			'parent' => 1
 		];
-		$this->entityArrayConverter->arrayToEntity($entity, $data);
-		$entity = Assert::type('KappaTests\Entities\RelationIdEntity', $entity->getParent());
+		$entity = $this->entityArrayConverter->arrayToEntity($entity, $data);
+		Assert::type('KappaTests\Entities\RelationIdEntity', $entity->getParent());
 	}
 }
 
