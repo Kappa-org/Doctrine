@@ -35,6 +35,15 @@ class DoctrineHelpersExtension extends CompilerExtension
 		$this->processForms($config['forms']);
 		$this->processReflections();
 		$this->processConverters();
+		$this->processIdentity();
+	}
+
+	private function processIdentity()
+	{
+		$builder = $this->getContainerBuilder();
+
+		$builder->getDefinition('nette.userStorage')
+			->setClass('Kappa\DoctrineHelpers\Http\UserStorage');
 	}
 
 	private function processForms($config)
