@@ -19,6 +19,7 @@
     "php": ">= 5.4.0",
     "nette/di": "~2.2@dev",
     "nette/utils": "~2.2@dev",
+    "nette/http": "~2.2@dev",
     "doctrine/orm": ">=2.4.7",
     "kdyby/doctrine": "~2.2@dev",
     "kdyby/events": "~2.3@dev"
