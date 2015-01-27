@@ -12,9 +12,9 @@
 
 namespace Kappa\Doctrine\Tests;
 
-use Kappa\Doctrine\Entities\FormItemsEntity;
 use Kappa\Doctrine\Forms\FormItemsCreator;
 use Kappa\Doctrine\Reflections\EntityReflectionFactory;
+use KappaTests\Entities\FormItemsEntity;
 use KappaTests\Entities\RelationIdEntity;
 use Kdyby;
 use Kdyby\Doctrine\QueryObject;

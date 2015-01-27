@@ -12,11 +12,9 @@ if ((!$loader = @include __DIR__ . '/../../vendor/autoload.php') && (!$loader = 
 	echo 'Install Nette Tester using `composer update --dev`';
 	exit(1);
 }
-$loader->add('KappaTests', __DIR__ . '/../');
+/** @var Composer\Autoload\ClassLoader $loader */
+$loader->addPsr4("KappaTests\\", __DIR__);
 
-require __DIR__ . '/Entities/GlobalEntity.php';
-require __DIR__ . '/Entities/RelationIdEntity.php';
-require __DIR__ . '/Entities/FormItemsEntity.php';
 
 // configure environment
 Tester\Environment::setup();
