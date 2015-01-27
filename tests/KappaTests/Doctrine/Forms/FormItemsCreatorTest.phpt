@@ -15,7 +15,6 @@ namespace KappaTests\Doctrine;
 use Kappa\Doctrine\Forms\FormItemsCreator;
 use Kappa\Doctrine\Reflections\EntityReflectionFactory;
 use KappaTests\Entities\FormItemsEntity;
-use KappaTests\Entities\RelationIdEntity;
 use Kdyby;
 use Kdyby\Doctrine\QueryObject;
 use Nette\DI\Container;
