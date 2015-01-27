@@ -24,7 +24,7 @@ Tester\Helpers::purge(TEMP_DIR);
 function getContainer()
 {
 	$configurator = new \Nette\Configurator();
-	$configurator->setTempDirectory(__DIR__ . '/../temp');
+	$configurator->setTempDirectory(TEMP_DIR);
 	$configurator->addConfig(__DIR__ . '/../data/config.neon');
 	return $configurator->createContainer();
 }
