@@ -1,7 +1,6 @@
 <?php
 /**
- * This file is part of the use Doctrine\Common\Collections\ArrayCollection;
-package.
+ * This file is part of the Kappa\Doctrine package.
  *
  * (c) Ondřej Záruba <zarubaondra@gmail.com>
  *
