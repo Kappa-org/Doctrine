@@ -39,9 +39,9 @@ class DoctrineExtensionTest extends TestCase
 		Assert::type($type, $this->container->getByType($type));
 	}
 
-	public function testConverters()
+	public function testConverter()
 	{
-		$type = 'Kappa\Doctrine\Converters\EntityArrayConverter';
+		$type = 'Kappa\Doctrine\Converters\Converter';
 		Assert::type($type, $this->container->getByType($type));
 	}
 

@@ -21,74 +21,55 @@ $ composer require kappa/doctrine:@dev
 
 ## Usages
 
-### EntityArrayConverter::entityToArray()
+### Converter->entityToArray()
+
+Method `entityToArray` requires entity object and returns `Kappa\Doctrine\Converters\EntityToArrayConverter`.
+
+* `setIgnoreList(array)` - set list of items which you can ignore *(ignore list and white list can be combined)*
+* `setWhiteList(array)` - set list of items which you can transform *(ignore list and white list can be combined)*
+* `addColumnCallback(column name, callable)` - set custom callback for transform concrete column
+* `addRelationCallback(column name, callable) - set custom callback for transform concrete column with relations
+* `convert()` - returns generated array
+
+**Example:**
 
 ```php
-$entity = new User();
-$entity->setName('John')
-	->setEmail('john@example.com');
-$data = $entityArrayConverter->entityToArray($entity);
-echo $data['name']; // returns "John"
-echo $data['email']; // returns "john@example.com"
-```
-
-`EntityArrayConverter::entityToArray()` requires one argument and three optionals arguments. First optional argument define ignored columns, 
-second argument you can use for conversion Doctrine collections to array and by last argument you can defined entity transformation.
-
-**Transformation example:**
-
-```php
-$article = new Article();
-$user = new User();
-$user->setName('John');
-$user->getId(); // returns 10
-
-$article->setTitle('Example article');
-$article->setUser($user);
-$data = $this->entityArrayConverter->entityToArray($article);
-$data_transform = $this->entityArrayConverter->entityToArray($article, [], false, ['user' => 'id']);
-var_dump($data['user']); // returns object of User entity
-var_dump($data_transform['user']); // return 10 (id of User entity)
+<?php
+$user = new User("Joe");
+$user->setParent(new User("Joe senior"))
+	->setAge(50);
+	->setPrivate("private");
+$array = $converter->entityToArray($user)
+	->setIgnoreList(["private"])
+	->addColumnCallback("age", function ($age) { return $age / 10; })
+	->addRelationCallback("parent", function(User $parent) { return $parent->getName(); })
+	->convert();
+echo $array['name']; // print Joe
+echo $array['parent']; // print Joe senior
+echo $array['age']; // print 5
 ```
 
 ### EntityArrayConverter::arrayToEntity()
 
+Method `arrayToEntity` requires two argument. First argument can be entity object or entity class name and returns 
+`Kappa\Doctrine\Converters\ArrayToEntityConverter`.
+
+* `setIgnoreList(array)` - set list of items which you can ignore *(ignore list and white list can be combined)*
+* `setWhiteList(array)` - set list of items which you can transform *(ignore list and white list can be combined)*
+* `convert()` - returns generated array
+
+**Example:**
+
 ```php
 $data = [
-	'name' => 'John',
-	'email' => 'john@example.com'
+	'name' => 'Joe';
+	'private' => 'text';
 ];
-$entity = new User();
-$entity->setNick('johnyX');
-$entityArrayConverter->arrayToEntity($entity, $data);
-// or
-$entity = $entityArrayConverter->arrayToEntity('Example\Namespace\User', $data);
+$entity = $converter->arrayToEntity('User', $data)
+	->setIgnoreList(['private'])
+	->convert();
+echo $entity->getName(); // print Joe 
 ```
-`EntityArrayConverter::arrayToEntity()` requires two arguments and one optional. Option argument can be array of ignored keys in input array.
-
-For columns defined as Doctrine collections will be used `add()` method of the collection
-
-`EntityArrayConverter::arrayToEntity()` contains support for automatically insert entity into relations by defined `targetEntity`
-
-#### Example
-
-**Database**
-
-id  | parent_id | name
-----|-----------|-------
-1   | NULL      | Johm
-
-**Usages**
-```php
-$data = [
-	'name' => 'John junior',
-	'parent' => 1
-];
-$entity = $entityArrayConverter->arrayToEntity('Example\Namespace\User', $data);
-var_dump($entity->getParent()); // returns entity with id 1 and name John
-```
-If is column defined as relations and value is integer, will be automatically converted to entity from database and inserted into new entity
-
 
 ### FormItemsCreator
 

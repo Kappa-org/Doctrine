@@ -34,7 +34,7 @@ class DoctrineExtension extends CompilerExtension
 		$config = $this->getConfig($this->defaultConfig);
 		$this->processForms($config['forms']);
 		$this->processReflections();
-		$this->processConverters();
+		$this->processConverter();
 		$this->processIdentity();
 	}
 
@@ -57,11 +57,11 @@ class DoctrineExtension extends CompilerExtension
 			]);
 	}
 
-	private function processConverters()
+	private function processConverter()
 	{
 		$builder = $this->getContainerBuilder();
-		$builder->addDefinition($this->prefix('entityArrayConverter'))
-			->setClass('Kappa\Doctrine\Converters\EntityArrayConverter');
+		$builder->addDefinition($this->prefix('converter'))
+			->setClass('Kappa\Doctrine\Converters\Converter');
 	}
 
 	private function processReflections()
