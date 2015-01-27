@@ -33,6 +33,13 @@ class EntityToArrayConverterTest extends ORMTestCase
 		parent::setUp();
 	}
 
+	public function testException()
+	{
+		Assert::exception(function () {
+			new EntityToArrayConverter('', $this->em);
+		}, 'Kappa\Doctrine\InvalidArgumentException');
+	}
+
 	public function testDefaultConvert()
 	{
 		$user = $this->buildEntity();
