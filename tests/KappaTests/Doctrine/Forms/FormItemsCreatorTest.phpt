@@ -10,7 +10,7 @@
  * @testCase
  */
 
-namespace Kappa\Doctrine\Tests;
+namespace KappaTests\Doctrine;
 
 use Kappa\Doctrine\Forms\FormItemsCreator;
 use Kappa\Doctrine\Reflections\EntityReflectionFactory;

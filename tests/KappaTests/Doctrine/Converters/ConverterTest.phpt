@@ -10,7 +10,7 @@
  * @testCase
  */
 
-namespace doctrine\Tests;
+namespace KappaTests\Doctrine;
 
 use Kappa\Doctrine\Converters\Converter;
 use KappaTests\ORMTestCase;
