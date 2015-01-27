@@ -21,7 +21,7 @@ $ composer require kappa/doctrine:@dev
 
 ## Usages
 
-### Converter->entityToArray()
+### Converter::entityToArray()
 
 Method `entityToArray` requires entity object and returns `Kappa\Doctrine\Converters\EntityToArrayConverter`.
 
