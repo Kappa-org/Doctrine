@@ -7,7 +7,7 @@ extensions:
 
 doctrine:
 	user: root
-	password: root
+	password:
 	dbname: test
 	driver: pdo_mysql
 	targetEntityMappings:

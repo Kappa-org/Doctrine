@@ -26,4 +26,8 @@ any direct, indirect, incidental, special, exemplary, or consequential damages
 loss of use, data, or profits; or business interruption) however caused and on
 any theory of liability, whether in contract, strict liability, or tort
 (including negligence or otherwise) arising in any way out of the use of this
+<<<<<<< HEAD
 software, even if advised of the possibility of such damage.
+=======
+software, even if advised of the possibility of such damage.
+>>>>>>> a36904cd89521b7b5416245f090a198e6f5cbdfb

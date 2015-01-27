@@ -3,13 +3,13 @@ language: php
 php:
         - "5.4"
         - "5.5"
+        - "5.6"
 
-matrix:
-        allow_failures:
-                - php: 5.6
-
-script: "VERBOSE=true ./vendor/bin/tester tests/"
+script: "./vendor/bin/tester tests/ -c ./tests/php-unix.ini"
 
 before_script:
         - composer self-update
         - composer install --dev
+        - rm ./tests/data/config.neon
+        - cp ./tests/data/config.travis.neon ./tests/data/config.neon
+        - mysql -u root < ./tests/data/database.sql

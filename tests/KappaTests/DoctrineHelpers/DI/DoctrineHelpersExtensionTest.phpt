@@ -6,48 +6,49 @@
  *
  * For the full copyright and license information, please view the license.md
  * file that was distributed with this source code.
- * 
+ *
  * @testCase
  */
 
 namespace Kappa\Doctrine\Tests;
 
-use Kappa\Tester\TestCase;
 use Nette\DI\Container;
 use Tester\Assert;
+use Tester\TestCase;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
 /**
  * Class DoctrineExtensionTest
+ *
  * @package Kappa\Doctrine\Tests
+ * @author Ondřej Záruba <http://zaruba-ondrej.cz>
  */
 class DoctrineExtensionTest extends TestCase
 {
-	/** @var \Nette\DI\Container */
 	private $container;
 
-	/**
-	 * @param Container $container
-	 */
 	public function __construct(Container $container)
 	{
 		$this->container = $container;
 	}
 
-	public function testEntityManipulator()
+	public function testReflection()
 	{
-		Assert::type('Kappa\Doctrine\Helpers\EntityManipulator', $this->container->getService('kappaDoctrine.entityManipulator'));
+		$type = 'Kappa\Doctrine\Reflections\EntityReflectionFactory';
+		Assert::type($type, $this->container->getByType($type));
 	}
 
-	public function testArrayHydration()
+	public function testConverters()
 	{
-		Assert::type('Kappa\Doctrine\Hydrators\ArrayHydrator', $this->container->getService('kappaDoctrine.arrayHydrator'));
+		$type = 'Kappa\Doctrine\Converters\EntityArrayConverter';
+		Assert::type($type, $this->container->getByType($type));
 	}
 
-	public function testEntityHydrator()
+	public function testForms()
 	{
-		Assert::type('Kappa\Doctrine\Hydrators\EntityHydrator', $this->container->getService('kappaDoctrine.entityHydrator'));
+		$type = 'Kappa\Doctrine\Forms\FormItemsCreator';
+		Assert::type($type, $this->container->getByType($type));
 	}
 }
 

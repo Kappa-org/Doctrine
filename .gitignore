@@ -1,6 +1,4 @@
-.idea
-vendor
-coverage.dat
+vendor/*
+composer.lock
 *.actual
 *.expected
-composer.lock

@@ -14,21 +14,60 @@ use Nette\DI\CompilerExtension;
 
 /**
  * Class DoctrineExtension
+ *
  * @package Kappa\Doctrine\DI
+ * @author Ondřej Záruba <http://zaruba-ondrej.cz>
  */
 class DoctrineExtension extends CompilerExtension
 {
+	private $defaultConfig = [
+		'forms' => [
+			'items' => [
+				'identifierColumn' => 'id',
+				'valueColumn' => 'title'
+			]
+		]
+	];
+
 	public function loadConfiguration()
+	{
+		$config = $this->getConfig($this->defaultConfig);
+		$this->processForms($config['forms']);
+		$this->processReflections();
+		$this->processConverters();
+		$this->processIdentity();
+	}
+
+	private function processIdentity()
 	{
 		$builder = $this->getContainerBuilder();
 
-		$builder->addDefinition($this->prefix('entityManipulator'))
-			->setClass('Kappa\Doctrine\Helpers\EntityManipulator');
+		$builder->getDefinition('nette.userStorage')
+			->setClass('Kappa\Doctrine\Http\UserStorage');
+	}
 
-		$builder->addDefinition($this->prefix('arrayHydrator'))
-			->setClass('Kappa\Doctrine\Hydrators\ArrayHydrator');
+	private function processForms($config)
+	{
+		$builder = $this->getContainerBuilder();
+		$builder->addDefinition($this->prefix('formItemsCreator'))
+			->setClass('Kappa\Doctrine\Forms\FormItemsCreator', [
+				'@doctrine.default.entityManager',
+				$this->prefix('@entityReflectionFactory'),
+				$config['items']
+			]);
+	}
 
-		$builder->addDefinition($this->prefix('entityHydrator'))
-			->setClass('Kappa\Doctrine\Hydrators\EntityHydrator');
+	private function processConverters()
+	{
+		$builder = $this->getContainerBuilder();
+		$builder->addDefinition($this->prefix('entityArrayConverter'))
+			->setClass('Kappa\Doctrine\Converters\EntityArrayConverter');
+	}
+
+	private function processReflections()
+	{
+		$builder = $this->getContainerBuilder();
+		$builder->addDefinition($this->prefix('entityReflectionFactory'))
+			->setClass('Kappa\Doctrine\Reflections\EntityReflectionFactory');
 	}
 }

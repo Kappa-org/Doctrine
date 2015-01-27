@@ -8,15 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Kappa\Doctrine;
+namespace KappaTests\Entities;
 
-/**
- * Class InvalidArgumentException
- *
- * @package Kappa\Doctrine
- * @author Ondřej Záruba <http://zaruba-ondrej.cz>
- */
-class InvalidArgumentException extends \LogicException
+interface IEntity
 {
 
 }
