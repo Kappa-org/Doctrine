@@ -29,11 +29,11 @@
     "nette/tester": "~1.0"
   },
   "autoload": {
-    "psr-0": {
-      "Kappa": "src/"
+    "psr-4": {
+      "Kappa\\Doctrine\\": "src/"
     },
     "classmap": [
-      "src/Kappa/Doctrine/exceptions.php"
+      "src/exceptions.php"
     ]
   },
   "extra": {
