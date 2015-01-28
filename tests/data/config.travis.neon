@@ -10,5 +10,3 @@ doctrine:
 	password:
 	dbname: test
 	driver: pdo_mysql
-	targetEntityMappings:
-		KappaTests\Entities\IEntity: KappaTests\Entities\GlobalEntity
