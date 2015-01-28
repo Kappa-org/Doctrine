@@ -31,4 +31,14 @@ class FormItemsEntity extends BaseEntity
 	 * @ORM\Column(type="string")
 	 */
 	protected $name;
+
+	/**
+	 * @param $title
+	 * @param $name
+	 */
+	public function __construct($title, $name)
+	{
+		$this->name = $name;
+		$this->title = $title;
+	}
 }
