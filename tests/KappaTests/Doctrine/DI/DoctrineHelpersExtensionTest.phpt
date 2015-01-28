@@ -33,12 +33,6 @@ class DoctrineExtensionTest extends TestCase
 		$this->container = $container;
 	}
 
-	public function testReflection()
-	{
-		$type = 'Kappa\Doctrine\Reflections\EntityReflectionFactory';
-		Assert::type($type, $this->container->getByType($type));
-	}
-
 	public function testConverter()
 	{
 		$type = 'Kappa\Doctrine\Converters\Converter';

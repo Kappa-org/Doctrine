@@ -29,19 +29,14 @@ class FormItemsCreator extends Object
 	/** @var EntityManager */
 	private $entityManager;
 
-	/** @var EntityReflectionFactory */
-	private $entityReflectionManager;
-
 	/**
 	 * @param EntityManager $entityManager
-	 * @param EntityReflectionFactory $entityReflectionFactory
 	 * @param array $defaultColumns
 	 */
-	public function __construct(EntityManager $entityManager, EntityReflectionFactory $entityReflectionFactory, array $defaultColumns)
+	public function __construct(EntityManager $entityManager, array $defaultColumns)
 	{
 		$this->defaultColumns = $defaultColumns;
 		$this->entityManager = $entityManager;
-		$this->entityReflectionManager = $entityReflectionFactory;
 	}
 
 	/**
@@ -59,15 +54,15 @@ class FormItemsCreator extends Object
 		$dao = $this->entityManager->getDao($entity);
 		$items = [];
 		foreach ($dao->fetch($queryObject) as $item) {
-			$entityReflection = $this->entityReflectionManager->create($item);
 			if ($identifierColumn === null) {
 				$identifierColumn = $this->defaultColumns['identifierColumn'];
 			}
 			if ($valueColumn === null) {
 				$valueColumn = $this->defaultColumns['valueColumn'];
 			}
-			$id = $entityReflection->get($identifierColumn);
-			$value = $entityReflection->get($valueColumn);
+			$metadata = $this->entityManager->getClassMetadata(get_class($item));
+			$id = $metadata->getFieldValue($item, $identifierColumn);
+			$value = $metadata->getFieldValue($item, $valueColumn);
 			$items[$id] = $value;
 		}
 

@@ -33,7 +33,6 @@ class DoctrineExtension extends CompilerExtension
 	{
 		$config = $this->getConfig($this->defaultConfig);
 		$this->processForms($config['forms']);
-		$this->processReflections();
 		$this->processConverter();
 		$this->processIdentity();
 	}
@@ -52,7 +51,6 @@ class DoctrineExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('formItemsCreator'))
 			->setClass('Kappa\Doctrine\Forms\FormItemsCreator', [
 				'@doctrine.default.entityManager',
-				$this->prefix('@entityReflectionFactory'),
 				$config['items']
 			]);
 	}
@@ -62,12 +60,5 @@ class DoctrineExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$builder->addDefinition($this->prefix('converter'))
 			->setClass('Kappa\Doctrine\Converters\Converter');
-	}
-
-	private function processReflections()
-	{
-		$builder = $this->getContainerBuilder();
-		$builder->addDefinition($this->prefix('entityReflectionFactory'))
-			->setClass('Kappa\Doctrine\Reflections\EntityReflectionFactory');
 	}
 }

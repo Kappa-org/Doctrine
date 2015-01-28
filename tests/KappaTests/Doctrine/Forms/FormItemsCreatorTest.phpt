@@ -51,7 +51,7 @@ class FormItemsCreatorTest extends ORMTestCase
 		$dao = $this->em->getDao('KappaTests\Entities\FormItemsEntity');
 		$dao->save([$entity1, $entity2]);
 
-		$this->formItemCreator = new FormItemsCreator($this->em, new EntityReflectionFactory($this->em), [
+		$this->formItemCreator = new FormItemsCreator($this->em, [
 			'identifierColumn' => 'id',
 			'valueColumn' => 'name'
 		]);
