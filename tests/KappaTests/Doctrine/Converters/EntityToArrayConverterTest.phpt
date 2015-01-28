@@ -89,7 +89,7 @@ class EntityToArrayConverterTest extends ORMTestCase
 		], $converter->convert());
 	}
 
-	public function testColumnCallback()
+	public function testFieldCallback()
 	{
 		$user = $this->buildEntity();
 		$converter = new EntityToArrayConverter($user, $this->em);
