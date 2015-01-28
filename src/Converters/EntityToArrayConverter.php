@@ -95,16 +95,8 @@ class EntityToArrayConverter extends Object
 	{
 		$result = [];
 		$metadata = $this->getMetadata();
-		foreach($metadata->getFieldNames() as $field) {
-			if ($this->isAllowedField($field)) {
-				$value = $metadata->getFieldValue($this->entity, $field);
-				if (array_key_exists($field, $this->fieldCallbacks)) {
-					$value = $this->fieldCallbacks[$field]($value);
-				}
-				$result[$field] = $value;
-			}
-		}
-		foreach ($metadata->getAssociationNames() as $field) {
+		$fields = array_merge($metadata->getFieldNames(), $metadata->getAssociationNames());
+		foreach($fields as $field) {
 			if ($this->isAllowedField($field)) {
 				$value = $metadata->getFieldValue($this->entity, $field);
 				if (array_key_exists($field, $this->fieldCallbacks)) {
