@@ -32,6 +32,24 @@ class ArrayToEntityConverterTest extends ORMTestCase
 		parent::setUp();
 	}
 
+	public function testEntityClassname()
+	{
+		$data = ['name' => 'Tester'];
+		$converter = new ArrayToEntityConverter('KappaTests\Entities\UserEntity', $data, $this->em);
+		Assert::type('KappaTests\Entities\UserEntity', $converter->convert());
+	}
+
+	public function testEntityObject()
+	{
+		$data = ['name' => 'Tester'];
+		$user = new UserEntity("Joe");
+		$converter = new ArrayToEntityConverter($user, $data, $this->em);
+		$entity = $converter->convert();
+		Assert::type('KappaTests\Entities\UserEntity', $entity);
+		Assert::same('Tester', $entity->getName());
+		Assert::same('Tester', $user->getName());
+	}
+
 	public function testDefaultConvert()
 	{
 		$data = [
