@@ -20,6 +20,7 @@ use Tester\TestCase;
  */
 class ORMTestCase extends TestCase
 {
+	/** @var \Kdyby\Doctrine\EntityManager */
 	protected $em;
 
 	protected function setUp()
