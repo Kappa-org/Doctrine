@@ -21,8 +21,8 @@ use Nette\Http\Session;
  */
 class UserStorage extends \Nette\Http\UserStorage
 {
-	/** @var \Kdyby\Doctrine\EntityDao */
-	private $identities;
+	private $entityManager;
+
 	/**
 	 * @param Session $session
 	 * @param EntityManager $entityManager
@@ -30,7 +30,7 @@ class UserStorage extends \Nette\Http\UserStorage
 	public function __construct(Session $session, EntityManager $entityManager)
 	{
 		parent::__construct($session);
-		$this->identities = $entityManager->getDao('Nette\Security\IIdentity');
+		$this->entityManager = $entityManager;
 	}
 
 
@@ -39,11 +39,12 @@ class UserStorage extends \Nette\Http\UserStorage
 	 */
 	public function getIdentity()
 	{
+		$dao = $this->entityManager->getDao('Nette\Security\IIdentity');
 		$identity = parent::getIdentity();
 		if (!$identity) {
 			return null;
 		}
-		$entity = $this->identities->find($identity->getId());
+		$entity = $dao->find($identity->getId());
 
 		return $entity;
 	}
