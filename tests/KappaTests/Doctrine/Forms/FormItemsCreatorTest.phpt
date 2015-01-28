@@ -12,14 +12,16 @@
 
 namespace KappaTests\Doctrine;
 
+use Doctrine\ORM\Tools\SchemaTool;
 use Kappa\Doctrine\Forms\FormItemsCreator;
 use Kappa\Doctrine\Reflections\EntityReflectionFactory;
 use KappaTests\Entities\FormItemsEntity;
+use KappaTests\ORMTestCase;
 use Kdyby;
 use Kdyby\Doctrine\QueryObject;
 use Nette\DI\Container;
 use Tester\Assert;
-use Tester\TestCase;
+use Tester\Environment;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
@@ -29,18 +31,27 @@ require_once __DIR__ . '/../../bootstrap.php';
  * @package Kappa\Doctrine\Tests
  * @author Ondřej Záruba <http://zaruba-ondrej.cz>
  */
-class FormItemsCreatorTest extends TestCase
+class FormItemsCreatorTest extends ORMTestCase
 {
 	/** @var FormItemsCreator */
 	private $formItemCreator;
 
-	/**
-	 * @param Container $container
-	 */
-	public function __construct(Container $container)
+	protected function setUp()
 	{
-		$entityManager = $container->getByType('Kdyby\Doctrine\EntityManager');
-		$this->formItemCreator = new FormItemsCreator($entityManager, new EntityReflectionFactory($entityManager), [
+		parent::setUp();
+		Environment::lock("db_from_items_entity", dirname(TEMP_DIR));
+		$entity1 = new FormItemsEntity("entity1 title", "entity1 name");
+		$entity2 = new FormItemsEntity("entity2 title", "entity2 name");
+		$classes = [
+			$this->em->getClassMetadata('KappaTests\Entities\FormItemsEntity'),
+		];
+		$schemaTool = new SchemaTool($this->em);
+		$schemaTool->dropSchema($classes);
+		$schemaTool->createSchema($classes);
+		$dao = $this->em->getDao('KappaTests\Entities\FormItemsEntity');
+		$dao->save([$entity1, $entity2]);
+
+		$this->formItemCreator = new FormItemsCreator($this->em, new EntityReflectionFactory($this->em), [
 			'identifierColumn' => 'id',
 			'valueColumn' => 'name'
 		]);
@@ -49,25 +60,25 @@ class FormItemsCreatorTest extends TestCase
 	public function testStringEntity()
 	{
 		$data = $this->formItemCreator->create(FormItemsEntity::getClassName(), new GetAll());
-		Assert::count(1, $data);
+		Assert::count(2, $data);
 		Assert::true(array_key_exists(1, $data));
-		Assert::same('John_name', $data[1]);
+		Assert::same('entity1 name', $data[1]);
 	}
 
-	public function testDefault()
+	public function testObjectEntity()
 	{
-		$data = $this->formItemCreator->create(new FormItemsEntity(), new GetAll());
-		Assert::count(1, $data);
+		$data = $this->formItemCreator->create(new FormItemsEntity("x", "y"), new GetAll());
+		Assert::count(2, $data);
 		Assert::true(array_key_exists(1, $data));
-		Assert::same('John_name', $data[1]);
+		Assert::same('entity1 name', $data[1]);
 	}
 
 	public function testColumnNames()
 	{
-		$data = $this->formItemCreator->create(new FormItemsEntity(), new GetAll(), 'title', 'name');
-		Assert::count(1, $data);
-		Assert::true(array_key_exists('John_name', $data));
-		Assert::same('John_title', $data['John_name']);
+		$data = $this->formItemCreator->create(FormItemsEntity::getClassName(), new GetAll(), 'title', 'name');
+		Assert::count(2, $data);
+		Assert::true(array_key_exists('entity1 name', $data));
+		Assert::same('entity1 title', $data['entity1 name']);
 	}
 }
 
@@ -90,4 +101,4 @@ class GetAll extends QueryObject
 	}
 }
 
-\run(new FormItemsCreatorTest(getContainer()));
+\run(new FormItemsCreatorTest());
