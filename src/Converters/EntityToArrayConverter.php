@@ -39,10 +39,7 @@ class EntityToArrayConverter extends Object
 	private $whiteList = null;
 
 	/** @var array */
-	private $relationCallbacks = [];
-
-	/** @var array */
-	private $columnCallbacks = [];
+	private $fieldCallbacks = [];
 
 	/**
 	 * @param object $entity
@@ -84,21 +81,9 @@ class EntityToArrayConverter extends Object
 	 * @param callable $callback
 	 * @return $this
 	 */
-	public function addColumnCallback($name, callable $callback)
+	public function addFieldCallback($name, callable $callback)
 	{
-		$this->columnCallbacks[$name] = $callback;
-
-		return $this;
-	}
-
-	/**
-	 * @param string $name
-	 * @param callable $callback
-	 * @return $this
-	 */
-	public function addRelationCallback($name, callable $callback)
-	{
-		$this->relationCallbacks[$name] = $callback;
+		$this->fieldCallbacks[$name] = $callback;
 
 		return $this;
 	}
@@ -113,8 +98,8 @@ class EntityToArrayConverter extends Object
 		foreach($metadata->getFieldNames() as $field) {
 			if ($this->isAllowedField($field)) {
 				$value = $metadata->getFieldValue($this->entity, $field);
-				if (array_key_exists($field, $this->columnCallbacks)) {
-					$value = $this->columnCallbacks[$field]($value);
+				if (array_key_exists($field, $this->fieldCallbacks)) {
+					$value = $this->fieldCallbacks[$field]($value);
 				}
 				$result[$field] = $value;
 			}
@@ -122,8 +107,8 @@ class EntityToArrayConverter extends Object
 		foreach ($metadata->getAssociationNames() as $field) {
 			if ($this->isAllowedField($field)) {
 				$value = $metadata->getFieldValue($this->entity, $field);
-				if (array_key_exists($field, $this->relationCallbacks)) {
-					$value = $this->relationCallbacks[$field]($value);
+				if (array_key_exists($field, $this->fieldCallbacks)) {
+					$value = $this->fieldCallbacks[$field]($value);
 				}
 				$result[$field] = $value;
 			}

@@ -93,15 +93,9 @@ class EntityToArrayConverterTest extends ORMTestCase
 	{
 		$user = $this->buildEntity();
 		$converter = new EntityToArrayConverter($user, $this->em);
-		$converter->addColumnCallback('name', function ($name) {return strtoupper($name);});
+		$converter->addFieldCallback('name', function ($name) { return strtoupper($name); })
+			->addFieldCallback('parent', function (UserEntity $user) { return $user->getName(); });
 		Assert::same(strtoupper($user->getName()), $converter->convert()['name']);
-	}
-
-	public function testRelationCallback()
-	{
-		$user = $this->buildEntity();
-		$converter = new EntityToArrayConverter($user, $this->em);
-		$converter->addRelationCallback('parent', function (UserEntity $user) {return $user->getName();});
 		Assert::same($user->getParent()->getName(), $converter->convert()['parent']);
 	}
 
