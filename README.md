@@ -27,8 +27,7 @@ Method `entityToArray` requires entity object and returns `Kappa\Doctrine\Conver
 
 * `setIgnoreList(array)` - set list of items which you can ignore *(ignore list and white list can be combined)*
 * `setWhiteList(array)` - set list of items which you can transform *(ignore list and white list can be combined)*
-* `addColumnCallback(column name, callable)` - set custom callback for transform concrete column
-* `addRelationCallback(column name, callable) - set custom callback for transform concrete column with relations
+* `addFieldCallback(column name, callable)` - set custom callback for concrete field
 * `convert()` - returns generated array
 
 **Example:**
@@ -41,8 +40,8 @@ $user->setParent(new User("Joe senior"))
 	->setPrivate("private");
 $array = $converter->entityToArray($user)
 	->setIgnoreList(["private"])
-	->addColumnCallback("age", function ($age) { return $age / 10; })
-	->addRelationCallback("parent", function(User $parent) { return $parent->getName(); })
+	->addFieldCallback("age", function ($age) { return $age / 10; })
+	->addFieldCallback("parent", function(User $parent) { return $parent->getName(); })
 	->convert();
 echo $array['name']; // print Joe
 echo $array['parent']; // print Joe senior
@@ -56,19 +55,27 @@ Method `arrayToEntity` requires two argument. First argument can be entity objec
 
 * `setIgnoreList(array)` - set list of items which you can ignore *(ignore list and white list can be combined)*
 * `setWhiteList(array)` - set list of items which you can transform *(ignore list and white list can be combined)*
+* `addItemCallback(column name, callable)` - set custom callback for concrete array item
 * `convert()` - returns generated array
 
 **Example:**
 
 ```php
 $data = [
-	'name' => 'Joe';
-	'private' => 'text';
+	'name' => 'Joe',
+	'age' => 50, 
+	'parent' => 1,
+	'private' => 'text',
 ];
 $entity = $converter->arrayToEntity('User', $data)
 	->setIgnoreList(['private'])
+	->setWhiteList(['age', 'name', 'private'])
+	->setItemCallback('parent', function ($parent) {
+		return $this->dao->find($parent);
+	})
 	->convert();
-echo $entity->getName(); // print Joe 
+echo $entity->getName(); // print Joe
+$entity->getParent(); // returns instance of User
 ```
 
 ### FormItemsCreator
