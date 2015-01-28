@@ -20,3 +20,14 @@ class InvalidArgumentException extends \LogicException
 {
 
 }
+
+/**
+ * Class EntityNotFoundException
+ *
+ * @package Kappa\Doctrine
+ * @author Ondřej Záruba <http://zaruba-ondrej.cz>
+ */
+class EntityNotFoundException extends \LogicException
+{
+
+}
