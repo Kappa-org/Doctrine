@@ -26,7 +26,8 @@ class DoctrineExtension extends CompilerExtension
 				'identifierColumn' => 'id',
 				'valueColumn' => 'title'
 			]
-		]
+		],
+		'identity' => false
 	];
 
 	public function loadConfiguration()
@@ -34,7 +35,9 @@ class DoctrineExtension extends CompilerExtension
 		$config = $this->getConfig($this->defaultConfig);
 		$this->processForms($config['forms']);
 		$this->processConverter();
-		$this->processIdentity();
+		if ($config['identity']) {
+			$this->processIdentity();
+		}
 	}
 
 	private function processIdentity()
