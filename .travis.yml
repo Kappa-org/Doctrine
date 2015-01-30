@@ -9,7 +9,7 @@ script: "./vendor/bin/tester tests/ -c ./tests/php-unix.ini"
 
 before_script:
         - composer self-update
-        - composer install --dev
+        - composer install --prefer-source
         - rm ./tests/data/config.neon
         - cp ./tests/data/config.travis.neon ./tests/data/config.neon
         - mysql -u root < ./tests/data/database.sql
