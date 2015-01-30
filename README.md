@@ -48,7 +48,7 @@ echo $array['parent']; // print Joe senior
 echo $array['age']; // print 5
 ```
 
-### EntityArrayConverter::arrayToEntity()
+### Converter::arrayToEntity()
 
 Method `arrayToEntity` requires two argument. First argument can be entity object or entity class name and returns 
 `Kappa\Doctrine\Converters\ArrayToEntityConverter`.
