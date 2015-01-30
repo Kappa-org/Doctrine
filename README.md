@@ -78,6 +78,26 @@ echo $entity->getName(); // print Joe
 $entity->getParent(); // returns instance of User
 ```
 
+### CrudManager
+
+Recommended way for create instance of `Kappa\Doctrine\Managers\CrudManager`
+is use `Kappa\Managers\CrudManagerFactory`.
+
+```php
+<?php
+$crudManager = $this->crudManagerFactory->create(new User());
+// or
+$crudManager = $this->crudManagerFactory->create('Some\Entity\User');
+```
+
+Method `create()` requires only one argument which it can be instance of entity or full namespace name. 
+
+Created CrudManager contains three methods for basic works with entity. 
+
+* `create(array)` - Create a new entity and fill with data
+* `update(id, array)` - Find entity by `id` and fill with data
+* `delete(id)` - Delete entity with `id`
+
 ### FormItemsCreator
 
 ```php
