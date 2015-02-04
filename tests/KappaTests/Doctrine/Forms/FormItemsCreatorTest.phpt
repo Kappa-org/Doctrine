@@ -39,7 +39,6 @@ class FormItemsCreatorTest extends ORMTestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		Environment::lock("db_from_items_entity", dirname(TEMP_DIR));
 		$entity1 = new FormItemsEntity("entity1 title", "entity1 name");
 		$entity2 = new FormItemsEntity("entity2 title", "entity2 name");
 		$classes = [
@@ -100,5 +99,7 @@ class GetAll extends QueryObject
 			->select('r');
 	}
 }
+
+Environment::lock("database", dirname(TEMP_DIR));
 
 \run(new FormItemsCreatorTest());
