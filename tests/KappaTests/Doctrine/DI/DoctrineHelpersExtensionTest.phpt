@@ -44,6 +44,12 @@ class DoctrineExtensionTest extends TestCase
 		$type = 'Kappa\Doctrine\Forms\FormItemsCreator';
 		Assert::type($type, $this->container->getByType($type));
 	}
+
+	public function testCrudManagerFactory()
+	{
+		$type = 'Kappa\Doctrine\Managers\CrudManagerFactory';
+		Assert::type($type, $this->container->getByType($type));
+	}
 }
 
 \run(new DoctrineExtensionTest(getContainer()));

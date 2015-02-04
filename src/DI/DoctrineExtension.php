@@ -35,6 +35,7 @@ class DoctrineExtension extends CompilerExtension
 		$config = $this->getConfig($this->defaultConfig);
 		$this->processForms($config['forms']);
 		$this->processConverter();
+		$this->processManagers();
 		if ($config['identity']) {
 			$this->processIdentity();
 		}
@@ -63,5 +64,12 @@ class DoctrineExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$builder->addDefinition($this->prefix('converter'))
 			->setClass('Kappa\Doctrine\Converters\Converter');
+	}
+
+	private function processManagers()
+	{
+		$builder = $this->getContainerBuilder();
+		$builder->addDefinition($this->prefix('crudManagerFactory'))
+			->setClass('Kappa\Doctrine\Managers\CrudManagerFactory');
 	}
 }
