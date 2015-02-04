@@ -31,3 +31,14 @@ class EntityNotFoundException extends \LogicException
 {
 
 }
+
+/**
+ * Class NotQueryBuilderException
+ *
+ * @package Kappa\Doctrine
+ * @author Ondřej Záruba <http://zaruba-ondrej.cz>
+ */
+class NotQueryBuilderException extends \LogicException
+{
+
+}
