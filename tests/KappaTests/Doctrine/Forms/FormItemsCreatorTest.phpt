@@ -10,16 +10,14 @@
  * @testCase
  */
 
-namespace KappaTests\Doctrine;
+namespace KappaTests\Doctrine\Forms;
 
 use Doctrine\ORM\Tools\SchemaTool;
 use Kappa\Doctrine\Forms\FormItemsCreator;
-use Kappa\Doctrine\Reflections\EntityReflectionFactory;
 use KappaTests\Mocks\FormItemsEntity;
 use KappaTests\ORMTestCase;
 use Kdyby;
 use Kdyby\Doctrine\QueryObject;
-use Nette\DI\Container;
 use Tester\Assert;
 use Tester\Environment;
 

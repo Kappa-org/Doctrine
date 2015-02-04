@@ -10,7 +10,7 @@
  * @testCase
  */
 
-namespace Kappa\Doctrine\Tests;
+namespace KappaTests\Doctrine\Managers;
 
 use Kappa\Doctrine\Converters\Converter;
 use Kappa\Doctrine\Managers\CrudManagerFactory;
@@ -28,7 +28,7 @@ require_once __DIR__ . '/../../bootstrap.php';
  */
 class CrudManagerFactoryTest extends ORMTestCase
 {
-	/** @var \Kappa\Doctrine|Managers\CrudManagerFactory */
+	/** @var CrudManagerFactory */
 	private $crudManagerFactory;
 
 	protected function setUp()

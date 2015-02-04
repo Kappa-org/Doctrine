@@ -10,7 +10,7 @@
  * @testCase
  */
 
-namespace KappaTests\Doctrine;
+namespace KappaTests\Doctrine\DI;
 
 use Nette\DI\Container;
 use Tester\Assert;

@@ -10,7 +10,7 @@
  * @testCase
  */
 
-namespace KappaTests\Doctrine;
+namespace KappaTests\Doctrine\Managers;
 
 use Doctrine\ORM\Tools\SchemaTool;
 use Kappa\Doctrine\Converters\Converter;

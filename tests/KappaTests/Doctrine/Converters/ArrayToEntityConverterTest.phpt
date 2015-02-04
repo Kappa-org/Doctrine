@@ -10,7 +10,7 @@
  * @testCase
  */
 
-namespace KappaTests\Doctrine;
+namespace KappaTests\Doctrine\Converters;
 
 use Kappa\Doctrine\Converters\ArrayToEntityConverter;
 use KappaTests\Mocks\UserEntity;
