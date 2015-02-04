@@ -87,7 +87,7 @@ class ArrayToEntityConverter extends Object
 	}
 
 	/**
-	 * @param stirng $name
+	 * @param string $name
 	 * @param callable $callback
 	 * @return $this
 	 */
