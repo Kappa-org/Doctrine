@@ -15,7 +15,7 @@ namespace KappaTests\Doctrine;
 use Doctrine\ORM\Tools\SchemaTool;
 use Kappa\Doctrine\Forms\FormItemsCreator;
 use Kappa\Doctrine\Reflections\EntityReflectionFactory;
-use KappaTests\Entities\FormItemsEntity;
+use KappaTests\Mocks\FormItemsEntity;
 use KappaTests\ORMTestCase;
 use Kdyby;
 use Kdyby\Doctrine\QueryObject;
@@ -42,12 +42,12 @@ class FormItemsCreatorTest extends ORMTestCase
 		$entity1 = new FormItemsEntity("entity1 title", "entity1 name");
 		$entity2 = new FormItemsEntity("entity2 title", "entity2 name");
 		$classes = [
-			$this->em->getClassMetadata('KappaTests\Entities\FormItemsEntity'),
+			$this->em->getClassMetadata('KappaTests\Mocks\FormItemsEntity'),
 		];
 		$schemaTool = new SchemaTool($this->em);
 		$schemaTool->dropSchema($classes);
 		$schemaTool->createSchema($classes);
-		$dao = $this->em->getDao('KappaTests\Entities\FormItemsEntity');
+		$dao = $this->em->getDao('KappaTests\Mocks\FormItemsEntity');
 		$dao->save([$entity1, $entity2]);
 
 		$this->formItemCreator = new FormItemsCreator($this->em, [

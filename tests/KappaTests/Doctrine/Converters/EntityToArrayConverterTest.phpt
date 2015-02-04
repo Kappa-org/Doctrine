@@ -14,7 +14,7 @@ namespace KappaTests\Doctrine\Converters;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Kappa\Doctrine\Converters\EntityToArrayConverter;
-use KappaTests\Entities\UserEntity;
+use KappaTests\Mocks\UserEntity;
 use KappaTests\ORMTestCase;
 use Tester\Assert;
 

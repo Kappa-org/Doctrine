@@ -14,7 +14,7 @@ namespace Kappa\Doctrine\Tests;
 
 use Kappa\Doctrine\Converters\Converter;
 use Kappa\Doctrine\Managers\CrudManagerFactory;
-use KappaTests\Entities\UserEntity;
+use KappaTests\Mocks\UserEntity;
 use KappaTests\ORMTestCase;
 use Tester\Assert;
 
@@ -39,7 +39,7 @@ class CrudManagerFactoryTest extends ORMTestCase
 
 	public function testCreateFromString()
 	{
-		Assert::type('Kappa\Doctrine\Managers\CrudManager', $this->crudManagerFactory->create('KappaTests\Entities\UserEntity'));
+		Assert::type('Kappa\Doctrine\Managers\CrudManager', $this->crudManagerFactory->create('KappaTests\Mocks\UserEntity'));
 	}
 
 	public function testCreateFromObject()

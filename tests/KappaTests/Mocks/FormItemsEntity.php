@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace KappaTests\Entities;
+namespace KappaTests\Mocks;
 
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;

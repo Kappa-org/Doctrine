@@ -15,7 +15,7 @@ namespace KappaTests\Doctrine;
 use Doctrine\ORM\Tools\SchemaTool;
 use Kappa\Doctrine\Converters\Converter;
 use Kappa\Doctrine\Managers\CrudManager;
-use KappaTests\Entities\UserEntity;
+use KappaTests\Mocks\UserEntity;
 use KappaTests\ORMTestCase;
 use Tester\Assert;
 use Tester\Environment;
@@ -42,12 +42,12 @@ class CrudManagerTest extends ORMTestCase
 		Environment::lock("database", dirname(TEMP_DIR));
 		$user = new UserEntity('Tester');
 		$classes = [
-			$this->em->getClassMetadata('KappaTests\Entities\UserEntity'),
+			$this->em->getClassMetadata('KappaTests\Mocks\UserEntity'),
 		];
 		$schemaTool = new SchemaTool($this->em);
 		$schemaTool->dropSchema($classes);
 		$schemaTool->createSchema($classes);
-		$this->dao = $this->em->getDao('KappaTests\Entities\UserEntity');
+		$this->dao = $this->em->getDao('KappaTests\Mocks\UserEntity');
 		$this->dao->save($user);
 		$this->crudManager = new CrudManager($this->dao, new Converter($this->em));
 	}
