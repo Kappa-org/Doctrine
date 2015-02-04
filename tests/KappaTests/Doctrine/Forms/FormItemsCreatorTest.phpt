@@ -15,9 +15,9 @@ namespace KappaTests\Doctrine\Forms;
 use Doctrine\ORM\Tools\SchemaTool;
 use Kappa\Doctrine\Forms\FormItemsCreator;
 use KappaTests\Mocks\FormItemsEntity;
+use KappaTests\Mocks\GetAllQueryObject;
 use KappaTests\ORMTestCase;
 use Kdyby;
-use Kdyby\Doctrine\QueryObject;
 use Tester\Assert;
 use Tester\Environment;
 
@@ -56,7 +56,7 @@ class FormItemsCreatorTest extends ORMTestCase
 
 	public function testStringEntity()
 	{
-		$data = $this->formItemCreator->create(FormItemsEntity::getClassName(), new GetAll());
+		$data = $this->formItemCreator->create(FormItemsEntity::getClassName(), new GetAllQueryObject());
 		Assert::count(2, $data);
 		Assert::true(array_key_exists(1, $data));
 		Assert::same('entity1 name', $data[1]);
@@ -64,7 +64,7 @@ class FormItemsCreatorTest extends ORMTestCase
 
 	public function testObjectEntity()
 	{
-		$data = $this->formItemCreator->create(new FormItemsEntity("x", "y"), new GetAll());
+		$data = $this->formItemCreator->create(new FormItemsEntity("x", "y"), new GetAllQueryObject());
 		Assert::count(2, $data);
 		Assert::true(array_key_exists(1, $data));
 		Assert::same('entity1 name', $data[1]);
@@ -72,29 +72,10 @@ class FormItemsCreatorTest extends ORMTestCase
 
 	public function testColumnNames()
 	{
-		$data = $this->formItemCreator->create(FormItemsEntity::getClassName(), new GetAll(), 'title', 'name');
+		$data = $this->formItemCreator->create(FormItemsEntity::getClassName(), new GetAllQueryObject(), 'title', 'name');
 		Assert::count(2, $data);
 		Assert::true(array_key_exists('entity1 name', $data));
 		Assert::same('entity1 title', $data['entity1 name']);
-	}
-}
-
-/**
- * Class GetAll
- *
- * @package Kappa\Doctrine\Tests
- * @author Ondřej Záruba <http://zaruba-ondrej.cz>
- */
-class GetAll extends QueryObject
-{
-	/**
-	 * @param \Kdyby\Persistence\Queryable $repository
-	 * @return \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder
-	 */
-	protected function doCreateQuery(Kdyby\Persistence\Queryable $repository)
-	{
-		return $repository->createQueryBuilder('r')
-			->select('r');
 	}
 }
 
