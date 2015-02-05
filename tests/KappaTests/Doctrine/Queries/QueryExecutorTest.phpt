@@ -16,6 +16,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Kappa\Doctrine\Queries\QueryExecutor;
 use KappaTests\Mocks\ExecutableQuery;
 use KappaTests\Mocks\FormItemsEntity;
+use KappaTests\Mocks\GetAll;
 use KappaTests\ORMTestCase;
 use Kdyby\Doctrine\EntityRepository;
 use Tester\Assert;
@@ -41,13 +42,14 @@ class QueryExecutorTest extends ORMTestCase
 	{
 		parent::setUp();
 		$entity1 = new FormItemsEntity("entity1 title", "entity1 name");
+		$entity2 = new FormItemsEntity("entity2 title", "entity2 name");
 		$classes = [
 			$this->em->getClassMetadata('KappaTests\Mocks\FormItemsEntity'),
 		];
 		$schemaTool = new SchemaTool($this->em);
 		$schemaTool->dropSchema($classes);
 		$schemaTool->createSchema($classes);
-		$this->em->persist($entity1);
+		$this->em->persist($entity1, $entity2);
 		$this->em->flush();
 		$this->dao = $this->em->getRepository('KappaTests\Mocks\FormItemsEntity');
 		$this->queryExecutor = new QueryExecutor($this->em);
@@ -57,7 +59,7 @@ class QueryExecutorTest extends ORMTestCase
 	{
 		Assert::same("entity1 title", $this->dao->find(1)->getTitle());
 		$this->queryExecutor->execute(new ExecutableQuery());
-		Assert::same("UPDATED", $this->dao->find(1)->getTitle());
+		Assert::same("UPDATED", $this->dao->find(2)->getTitle());
 	}*/
 }
 
