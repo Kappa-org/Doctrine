@@ -29,8 +29,9 @@ class ExecutableQuery implements Executable
 	{
 		$queryBuilder->update('KappaTests\Mocks\FormItemsEntity', 'r')
 			->set('r.title', $queryBuilder->expr()->literal('UPDATED'))
-			->where('r.id = :id')
-			->setParameter('id', 1);
+			->where('r.id = ?0')
+			->orWhere('r.id = ?1')
+			->setParameters([1, 2]);
 
 		return $queryBuilder;
 	}
