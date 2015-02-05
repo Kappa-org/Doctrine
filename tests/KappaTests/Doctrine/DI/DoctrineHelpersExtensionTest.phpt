@@ -50,6 +50,12 @@ class DoctrineExtensionTest extends TestCase
 		$type = 'Kappa\Doctrine\Managers\CrudManagerFactory';
 		Assert::type($type, $this->container->getByType($type));
 	}
+
+	public function testQueryExecutor()
+	{
+		$type = 'Kappa\Doctrine\Queries\QueryExecutor';
+		Assert::type($type, $this->container->getByType($type));
+	}
 }
 
 \run(new DoctrineExtensionTest(getContainer()));
