@@ -38,18 +38,17 @@ class QueryExecutorTest extends ORMTestCase
 	/** @var EntityRepository */
 	private $dao;
 
-	/*protected function setUp()
+	protected function setUp()
 	{
 		parent::setUp();
 		$entity1 = new FormItemsEntity("entity1 title", "entity1 name");
-		$entity2 = new FormItemsEntity("entity2 title", "entity2 name");
 		$classes = [
 			$this->em->getClassMetadata('KappaTests\Mocks\FormItemsEntity'),
 		];
 		$schemaTool = new SchemaTool($this->em);
 		$schemaTool->dropSchema($classes);
 		$schemaTool->createSchema($classes);
-		$this->em->persist($entity1, $entity2);
+		$this->em->persist($entity1);
 		$this->em->flush();
 		$this->dao = $this->em->getRepository('KappaTests\Mocks\FormItemsEntity');
 		$this->queryExecutor = new QueryExecutor($this->em);
@@ -57,10 +56,12 @@ class QueryExecutorTest extends ORMTestCase
 
 	public function testBuild()
 	{
-		Assert::same("entity1 title", $this->dao->find(1)->getTitle());
+		$entity = $this->dao->find(1);
+		Assert::same("entity1 title", $entity->getTitle());
 		$this->queryExecutor->execute(new ExecutableQuery());
-		Assert::same("UPDATED", $this->dao->find(2)->getTitle());
-	}*/
+		$this->em->refresh($entity);
+		Assert::same("UPDATED", $entity->getTitle());
+	}
 }
 
 Environment::lock("database", dirname(TEMP_DIR));
