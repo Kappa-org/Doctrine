@@ -140,8 +140,8 @@ Third argument is `valueColumn` and last argument is `identifierColumn`
 
 Time to time is needed run DQL query instead of manipulate with entity. Great way is build UPDATE (or DELETE) with `QueryBuilder`.
 
-Is very useful to create a query object for such cases. In [Doctrine]() and [Kdyby\Doctrine] you can create `SELECT` query
-and run with `$this->repository->fetch(new QueryObject)` but `UPDATE` or `DELETE` query is not supported. `QueryExecutor`
+Is very useful to create a query object for such cases. In [Doctrine](http://www.doctrine-project.org/) and [Kdyby\Doctrine](https://github.com/Kdyby/Doctrine)
+you can create `SELECT` query and run with `$this->repository->fetch(new QueryObject)` but `UPDATE` or `DELETE` query is not supported. `QueryExecutor`
 is precisely for these situations.
 
 **Example:**
