@@ -10,6 +10,7 @@
 
 namespace Kappa\Doctrine\Queries;
 
+use Kappa\Doctrine\InvalidArgumentException;
 use Kappa\Doctrine\NotQueryBuilderException;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\QueryBuilder;
@@ -35,15 +36,25 @@ class QueryExecutor extends Object
 	}
 
 	/**
-	 * @param Executable $query
+	 * @param Executable|ExecutableCollection $query
 	 */
-	public function execute(Executable $query)
+	public function execute($query)
 	{
-		$builder = $this->entityManager->createQueryBuilder();
-		$qb = $query->build($builder);
-		if (!$qb instanceof QueryBuilder) {
-			throw new NotQueryBuilderException('Executable object ' . get_class($query) . ' must returns instance of QueryBuilder');
+		if (!$query instanceof Executable && !$query instanceof ExecutableCollection) {
+			throw new InvalidArgumentException(__METHOD__ . " Query can be only instance of Exectable or ExecutableCollection");
 		}
-		$qb->getQuery()->execute();
+		$builder = $this->entityManager->createQueryBuilder();
+		if ($query instanceof Executable) {
+			$queries = [$query];
+		} else {
+			$queries = $query->getQueries();
+		}
+		foreach ($queries as $query) {
+			$qb = $query->build($builder);
+			if (!$qb instanceof QueryBuilder) {
+				throw new NotQueryBuilderException('Executable object ' . get_class($query) . ' must returns instance of QueryBuilder');
+			}
+			$qb->getQuery()->execute();
+		}
 	}
 }

@@ -14,6 +14,7 @@ namespace KappaTests\Doctrine\Queries;
 
 use Doctrine\ORM\Tools\SchemaTool;
 use Kappa\Doctrine\Queries\QueryExecutor;
+use KappaTests\Mocks\ExecutableCollection;
 use KappaTests\Mocks\ExecutableQuery;
 use KappaTests\Mocks\FormItemsEntity;
 use KappaTests\Mocks\GetAll;
@@ -59,6 +60,15 @@ class QueryExecutorTest extends ORMTestCase
 		$entity = $this->dao->find(1);
 		Assert::same("entity1 title", $entity->getTitle());
 		$this->queryExecutor->execute(new ExecutableQuery());
+		$this->em->refresh($entity);
+		Assert::same("UPDATED", $entity->getTitle());
+	}
+
+	public function testBuildWithCollection()
+	{
+		$entity = $this->dao->find(1);
+		Assert::same("entity1 title", $entity->getTitle());
+		$this->queryExecutor->execute(new ExecutableCollection());
 		$this->em->refresh($entity);
 		Assert::same("UPDATED", $entity->getTitle());
 	}
