@@ -18,7 +18,7 @@ use Nette\Object;
  * @package KappaTests\Mocks
  * @author Ondřej Záruba <http://zaruba-ondrej.cz>
  */
-class ExecutableCollection extends Object implements \Kappa\Doctrine\Queries\ExecutableCollection
+class ExecutableCollection extends Object implements \Kappa\Doctrine\Queries\ExecutableCollectionInterface
 {
 	/**
 	 * @return array

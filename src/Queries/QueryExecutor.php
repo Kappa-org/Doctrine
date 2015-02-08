@@ -36,11 +36,11 @@ class QueryExecutor extends Object
 	}
 
 	/**
-	 * @param Executable|ExecutableCollection $query
+	 * @param Executable|ExecutableCollectionInterface $query
 	 */
 	public function execute($query)
 	{
-		if (!$query instanceof Executable && !$query instanceof ExecutableCollection) {
+		if (!$query instanceof Executable && !$query instanceof ExecutableCollectionInterface) {
 			throw new InvalidArgumentException(__METHOD__ . " Query can be only instance of Exectable or ExecutableCollection");
 		}
 		$builder = $this->entityManager->createQueryBuilder();

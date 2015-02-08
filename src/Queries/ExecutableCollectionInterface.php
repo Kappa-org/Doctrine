@@ -16,7 +16,7 @@ namespace Kappa\Doctrine\Queries;
  * @package Kappa\Doctrine\Queries
  * @author Ondřej Záruba <http://zaruba-ondrej.cz>
  */
-interface ExecutableCollection
+interface ExecutableCollectionInterface
 {
 	/**
 	 * @return array
