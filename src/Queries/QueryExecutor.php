@@ -43,13 +43,13 @@ class QueryExecutor extends Object
 		if (!$query instanceof Executable && !$query instanceof ExecutableCollectionInterface) {
 			throw new InvalidArgumentException(__METHOD__ . " Query can be only instance of Exectable or ExecutableCollection");
 		}
-		$builder = $this->entityManager->createQueryBuilder();
 		if ($query instanceof Executable) {
 			$queries = [$query];
 		} else {
 			$queries = $query->getQueries();
 		}
 		foreach ($queries as $query) {
+			$builder = $this->entityManager->createQueryBuilder();
 			$qb = $query->build($builder);
 			if (!$qb instanceof QueryBuilder) {
 				throw new NotQueryBuilderException('Executable object ' . get_class($query) . ' must returns instance of QueryBuilder');
