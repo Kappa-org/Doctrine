@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
+use Nette\Utils\Strings;
 
 /**
  * @ORM\Entity
@@ -27,6 +28,11 @@ class UserEntity extends BaseEntity
 	 * @ORM\Column(type="string", name="supername")
 	 */
 	protected $name;
+
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	protected $webalizeName;
 
 	/**
 	 * @ORM\OneToOne(targetEntity="UserEntity")
@@ -58,6 +64,7 @@ class UserEntity extends BaseEntity
 	public function __construct($name, UserEntity $info = null, UserEntity  $children = null, UserEntity  $parent = null, UserEntity  $users = null)
 	{
 		$this->name = $name;
+		$this->webalizeName = Strings::webalize($name);
 		$this->users = new ArrayCollection();
 		$this->children = new ArrayCollection();
 		if ($info) {
@@ -72,6 +79,18 @@ class UserEntity extends BaseEntity
 		if ($users) {
 			$this->addUser($users);
 		}
+	}
+
+	/**
+	 * @param string $name
+	 * @return $this
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
+		$this->webalizeName = Strings::webalize($name);
+
+		return $this;
 	}
 
 	public function addChildren(UserEntity $user)

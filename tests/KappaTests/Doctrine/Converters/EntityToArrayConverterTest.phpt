@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Kappa\Doctrine\Converters\EntityToArrayConverter;
 use KappaTests\Mocks\UserEntity;
 use KappaTests\ORMTestCase;
+use Nette\Utils\Strings;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../bootstrap.php';
@@ -47,6 +48,7 @@ class EntityToArrayConverterTest extends ORMTestCase
 		Assert::equal([
 			'id' => $user->getId(),
 			'name' => $user->getName(),
+			'webalizeName' => Strings::webalize($user->getName()),
 			'info' => $user->getInfo(),
 			'parent' => $user->getParent(),
 			'children' => new ArrayCollection($user->getChildren()),
@@ -62,6 +64,7 @@ class EntityToArrayConverterTest extends ORMTestCase
 		Assert::equal([
 			'id' => $user->getId(),
 			'info' => $user->getInfo(),
+			'webalizeName' => Strings::webalize($user->getName()),
 			'users' => new ArrayCollection($user->getUsers())
 		], $converter->convert());
 	}

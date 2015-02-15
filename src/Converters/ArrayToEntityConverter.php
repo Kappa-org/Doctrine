@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Object;
+use Nette\Utils\Callback;
 
 /**
  * Class ArrayToEntityConverter
@@ -23,6 +24,10 @@ use Nette\Object;
  */
 class ArrayToEntityConverter extends Object
 {
+	const GET = 'get';
+
+	const SET = 'set';
+
 	/** @var EntityManager */
 	private $entityManager;
 
@@ -115,7 +120,12 @@ class ArrayToEntityConverter extends Object
 				if (array_key_exists($field, $this->itemCallbacks)) {
 					$value = $this->itemCallbacks[$field]($value);
 				}
-				$metadata->setFieldValue($entity, $field, $value);
+				$method = $this->getMethodName($field, self::SET);
+				if (is_callable($entity, $method)) {
+					Callback::invokeArgs([$entity, $method], [$value]);
+				} else {
+					$metadata->setFieldValue($entity, $field, $value);
+				}
 			} else {
 				if ($fieldMetadata['type'] == ClassMetadata::MANY_TO_MANY || $fieldMetadata['type'] == ClassMetadata::ONE_TO_MANY) {
 					$metadata->setFieldValue($entity, $field, new ArrayCollection());
@@ -124,10 +134,16 @@ class ArrayToEntityConverter extends Object
 		}
 		foreach ($metadata->getFieldNames() as $field) {
 			if (array_key_exists($field, $this->data) && $this->isAllowedField($field)) {
+				$value = $this->data[$field];
 				if (array_key_exists($field, $this->itemCallbacks)) {
 					$value = $this->itemCallbacks[$field]($value);
 				}
-				$metadata->setFieldValue($entity, $field, $this->data[$field]);
+				$method = $this->getMethodName($field, self::SET);
+				if (is_callable([$entity, $method])) {
+					Callback::invokeArgs([$entity, $method], [$value]);
+				} else {
+					$metadata->setFieldValue($entity, $field, $value);
+				}
 			}
 		}
 
@@ -173,5 +189,18 @@ class ArrayToEntityConverter extends Object
 		}
 
 		return true;
+	}
+
+	/**
+	 * @param string $name
+	 * @param string $type
+	 * @return string
+	 */
+	private function getMethodName($name, $type)
+	{
+		$methodName = $type;
+		$methodName .= ucfirst($name);
+
+		return $methodName;
 	}
 }
