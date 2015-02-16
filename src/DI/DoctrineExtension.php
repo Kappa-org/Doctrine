@@ -38,16 +38,20 @@ class DoctrineExtension extends CompilerExtension
 		$this->processManagers();
 		$this->processQueries();
 		if ($config['identity']) {
-			$this->processIdentity();
+			$this->processIdentity($config['identity']);
 		}
 	}
 
-	private function processIdentity()
+	private function processIdentity($identity)
 	{
 		$builder = $this->getContainerBuilder();
 
 		$builder->getDefinition('nette.userStorage')
-			->setClass('Kappa\Doctrine\Http\UserStorage');
+			->setClass('Kappa\Doctrine\Http\UserStorage', [
+				'...',
+				'...',
+				$identity
+			]);
 	}
 
 	private function processForms($config)

@@ -21,16 +21,22 @@ use Nette\Http\Session;
  */
 class UserStorage extends \Nette\Http\UserStorage
 {
+	/** @var EntityManager */
 	private $entityManager;
+
+	/** @var string */
+	private $className;
 
 	/**
 	 * @param Session $session
 	 * @param EntityManager $entityManager
+	 * @param string $className
 	 */
-	public function __construct(Session $session, EntityManager $entityManager)
+	public function __construct(Session $session, EntityManager $entityManager, $className)
 	{
 		parent::__construct($session);
 		$this->entityManager = $entityManager;
+		$this->className = $className;
 	}
 
 
@@ -39,7 +45,7 @@ class UserStorage extends \Nette\Http\UserStorage
 	 */
 	public function getIdentity()
 	{
-		$dao = $this->entityManager->getDao('Nette\Security\IIdentity');
+		$dao = $this->entityManager->getRepository($this->className);
 		$identity = parent::getIdentity();
 		if (!$identity) {
 			return null;
