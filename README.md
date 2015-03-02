@@ -46,7 +46,7 @@ $array = $converter->entityToArray($user)
 	->convert();
 echo $array['name']; // print Joe
 echo $array['parent']; // print Joe senior
-echo $array['age']; // print 5
+echo $array['age']; // print 99
 ```
 
 ### Converter::arrayToEntity()
