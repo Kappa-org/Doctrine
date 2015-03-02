@@ -113,49 +113,65 @@ class ArrayToEntityConverter extends Object
 		foreach ($metadata->getAssociationNames() as $field) {
 			$fieldMetadata = $metadata->getAssociationMapping($field);
 			if (array_key_exists($field, $this->data) && $this->isAllowedField($field)) {
-				$value = $this->data[$field];
 				if ($fieldMetadata['type'] == ClassMetadata::MANY_TO_MANY || $fieldMetadata['type'] == ClassMetadata::ONE_TO_MANY) {
-					$value = new ArrayCollection($this->data[$field]);
-				}
-				if (array_key_exists($field, $this->itemResolvers)) {
-					if (is_callable($this->itemResolvers[$field])) {
-						$value = $this->itemResolvers[$field]($value);
-					} else {
-						$value = $this->itemResolvers[$field];
-					}
-				}
-				$method = $this->getMethodName($field, self::SET);
-				if (is_callable($entity, $method)) {
-					Callback::invokeArgs([$entity, $method], [$value]);
+					$value = $this->getResolvedValue($field, true);
 				} else {
-					$metadata->setFieldValue($entity, $field, $value);
+					$value = $this->getResolvedValue($field);
 				}
+				$this->invokeValue($field, $value);
 			} else {
 				if ($fieldMetadata['type'] == ClassMetadata::MANY_TO_MANY || $fieldMetadata['type'] == ClassMetadata::ONE_TO_MANY) {
-					$metadata->setFieldValue($entity, $field, new ArrayCollection());
+					$this->invokeValue($field, new ArrayCollection(), false);
 				}
 			}
 		}
 		foreach ($metadata->getFieldNames() as $field) {
 			if (array_key_exists($field, $this->data) && $this->isAllowedField($field)) {
-				$value = $this->data[$field];
-				if (array_key_exists($field, $this->itemResolvers)) {
-					if (is_callable($this->itemResolvers[$field])) {
-						$value = $this->itemResolvers[$field]($value);
-					} else {
-						$value = $this->itemResolvers[$field];
-					}
-				}
-				$method = $this->getMethodName($field, self::SET);
-				if (is_callable([$entity, $method])) {
-					Callback::invokeArgs([$entity, $method], [$value]);
-				} else {
-					$metadata->setFieldValue($entity, $field, $value);
-				}
+				$value = $this->getResolvedValue($field);
+				$this->invokeValue($field, $value);
 			}
 		}
 
 		return $entity;
+	}
+
+	/**
+	 * @param $item
+	 * @param bool $convertCollection
+	 * @return mixed
+	 */
+	private function getResolvedValue($item, $convertCollection = false)
+	{
+		$value = $this->data[$item];
+		if ($convertCollection) {
+			$value = new ArrayCollection($value);
+		}
+		if (array_key_exists($item, $this->itemResolvers)) {
+			$resolver = $this->itemResolvers[$item];
+			if (is_callable($resolver)) {
+				$value = $resolver($value);
+			} else {
+				$value = $resolver;
+			}
+		}
+
+		return $value;
+	}
+
+	/**
+	 * @param $field
+	 * @param $value
+	 * @param bool $useSetter
+	 */
+	private function invokeValue($field, $value, $useSetter = true)
+	{
+		$entity = $this->getEntity();
+		$method = $this->getMethodName($field, self::SET);
+		if (is_callable([$entity, $method]) && $useSetter) {
+			Callback::invokeArgs([$entity, $method], [$value]);
+		} else {
+			$this->getMetadata()->setFieldValue($entity, $field, $value);
+		}
 	}
 
 	/**
