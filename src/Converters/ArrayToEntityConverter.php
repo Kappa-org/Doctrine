@@ -132,6 +132,9 @@ class ArrayToEntityConverter extends Object
 				if ($fieldMetadata['type'] == ClassMetadata::MANY_TO_MANY || $fieldMetadata['type'] == ClassMetadata::ONE_TO_MANY) {
 					$value = new ArrayCollection($this->data[$field]);
 				}
+				if (array_key_exists($field, $this->itemValues)) {
+					$value = $this->itemValues[$field];
+				}
 				if (array_key_exists($field, $this->itemCallbacks)) {
 					$value = $this->itemCallbacks[$field]($value);
 				}
