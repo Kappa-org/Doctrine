@@ -98,19 +98,31 @@ class EntityToArrayConverter extends Object
 		$fields = array_merge($metadata->getFieldNames(), $metadata->getAssociationNames());
 		foreach($fields as $field) {
 			if ($this->isAllowedField($field)) {
-				$value = $metadata->getFieldValue($this->entity, $field);
-				if (array_key_exists($field, $this->filedResolvers)) {
-					if (is_callable($this->filedResolvers[$field])) {
-						$value = $this->filedResolvers[$field]($value);
-					} else {
-						$value = $this->filedResolvers[$field];
-					}
-				}
+				$value = $this->getResolvedValue($field);
 				$result[$field] = $value;
 			}
 		}
 
 		return $result;
+	}
+
+	/**
+	 * @param string $filed
+	 * @return mixed
+	 */
+	private function getResolvedValue($filed)
+	{
+		$value = $this->getMetadata()->getFieldValue($this->entity, $filed);
+		if (array_key_exists($filed, $this->filedResolvers)) {
+			$resolver = $this->filedResolvers[$filed];
+			if (is_callable($resolver)) {
+				$value = $resolver($value);
+			} else {
+				$value = $resolver;
+			}
+		}
+
+		return $value;
 	}
 
 	/**
