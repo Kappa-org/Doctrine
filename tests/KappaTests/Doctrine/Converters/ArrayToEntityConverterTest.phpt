@@ -113,6 +113,18 @@ class ArrayToEntityConverterTest extends ORMTestCase
 		$converter->addItemCallback('parent', function ($name) use ($parent) {return $parent;});
 		Assert::equal(new UserEntity("Tester", null, null, $parent), $converter->convert());
 	}
+
+	public function testItem()
+	{
+		$data = [
+			'name' => 'Tester',
+			'parent' => 'Joe'
+		];
+		$parent = new UserEntity("Joe");
+		$converter = new ArrayToEntityConverter('KappaTests\Mocks\UserEntity', $data, $this->em);
+		$converter->addItem('parent', $parent);
+		Assert::equal(new UserEntity("Tester", null, null, $parent), $converter->convert());
+	}
 }
 
 \run(new ArrayToEntityConverterTest());

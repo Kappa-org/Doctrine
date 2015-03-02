@@ -64,13 +64,15 @@ Method `arrayToEntity` requires two argument. First argument can be entity objec
 ```php
 $data = [
 	'name' => 'Joe',
-	'age' => 50, 
+	'age' => 50,
+	'sex' => 'male',
 	'parent' => 1,
 	'private' => 'text',
 ];
 $entity = $converter->arrayToEntity('User', $data)
 	->setIgnoreList(['private'])
 	->setWhiteList(['age', 'name', 'private'])
+	->addItem('sex', 'female')
 	->addItemCallback('parent', function ($parent) {
 		return $this->dao->find($parent);
 	})
