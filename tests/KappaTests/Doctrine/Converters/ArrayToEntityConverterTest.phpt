@@ -88,7 +88,7 @@ class ArrayToEntityConverterTest extends ORMTestCase
 		Assert::equal($expectedUser, $converter->convert());
 	}
 
-	public function testCombineWhiteAndIngnoreLists()
+	public function testCombineWhiteAndIgnoreLists()
 	{
 		$data = [
 			'name' => 'Tester',
