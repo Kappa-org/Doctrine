@@ -27,7 +27,7 @@ Method `entityToArray` requires entity object and returns `Kappa\Doctrine\Conver
 
 * `setIgnoreList(array)` - set list of items which you can ignore *(ignore list and white list can be combined)*
 * `setWhiteList(array)` - set list of items which you can transform *(ignore list and white list can be combined)*
-* `addFieldCallback(column name, callable)` - set custom callback for concrete field
+* `addFieldResolver(column name, resolver)` - you can set closure or concrete value for field
 * `convert()` - returns generated array
 
 **Example:**
@@ -40,12 +40,12 @@ $user->setParent(new User("Joe senior"))
 	->setPrivate("private");
 $array = $converter->entityToArray($user)
 	->setIgnoreList(["private"])
-	->addFieldCallback("age", function ($age) { return $age / 10; })
-	->addFieldCallback("parent", function(User $parent) { return $parent->getName(); })
+	->addFieldResolver("age", 10)
+	->addFieldResolver("parent", function(User $parent) { return $parent->getName(); })
 	->convert();
 echo $array['name']; // print Joe
 echo $array['parent']; // print Joe senior
-echo $array['age']; // print 5
+echo $array['age']; // print 10
 ```
 
 ### Converter::arrayToEntity()
@@ -55,7 +55,7 @@ Method `arrayToEntity` requires two argument. First argument can be entity objec
 
 * `setIgnoreList(array)` - set list of items which you can ignore *(ignore list and white list can be combined)*
 * `setWhiteList(array)` - set list of items which you can transform *(ignore list and white list can be combined)*
-* `addItemCallback(column name, callable)` - set custom callback for concrete array item
+* `addItemResolver(column name, resolver)` - you can set closure or concrete value for item 
 * `convert()` - returns generated array
 
 **Example:**
@@ -65,16 +65,19 @@ $data = [
 	'name' => 'Joe',
 	'age' => 50, 
 	'parent' => 1,
+	'sex' => 'male',
 	'private' => 'text',
 ];
 $entity = $converter->arrayToEntity('User', $data)
 	->setIgnoreList(['private'])
 	->setWhiteList(['age', 'name', 'private'])
-	->setItemCallback('parent', function ($parent) {
+	->setItemResolver('parent', function ($parent) {
 		return $this->dao->find($parent);
 	})
+	->setItemResolver('sex', 'female')
 	->convert();
 echo $entity->getName(); // print Joe
+echo $entity->getSex(); // print female
 $entity->getParent(); // returns instance of User
 ```
 

@@ -39,7 +39,7 @@ class EntityToArrayConverter extends Object
 	private $whiteList = null;
 
 	/** @var array */
-	private $fieldCallbacks = [];
+	private $filedResolvers = [];
 
 	/**
 	 * @param object $entity
@@ -78,12 +78,12 @@ class EntityToArrayConverter extends Object
 
 	/**
 	 * @param string $name
-	 * @param callable $callback
+	 * @param mixed $resolver
 	 * @return $this
 	 */
-	public function addFieldCallback($name, callable $callback)
+	public function addFieldResolver($name, $resolver)
 	{
-		$this->fieldCallbacks[$name] = $callback;
+		$this->filedResolvers[$name] = $resolver;
 
 		return $this;
 	}
@@ -99,8 +99,12 @@ class EntityToArrayConverter extends Object
 		foreach($fields as $field) {
 			if ($this->isAllowedField($field)) {
 				$value = $metadata->getFieldValue($this->entity, $field);
-				if (array_key_exists($field, $this->fieldCallbacks)) {
-					$value = $this->fieldCallbacks[$field]($value);
+				if (array_key_exists($field, $this->filedResolvers)) {
+					if (is_callable($this->filedResolvers[$field])) {
+						$value = $this->filedResolvers[$field]($value);
+					} else {
+						$value = $this->filedResolvers[$field];
+					}
 				}
 				$result[$field] = $value;
 			}

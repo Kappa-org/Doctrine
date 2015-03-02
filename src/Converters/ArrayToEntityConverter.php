@@ -50,7 +50,7 @@ class ArrayToEntityConverter extends Object
 	private $whiteList;
 
 	/** @var array */
-	private $itemCallbacks = [];
+	private $itemResolvers = [];
 
 	/**
 	 * @param string|object $entity
@@ -93,12 +93,12 @@ class ArrayToEntityConverter extends Object
 
 	/**
 	 * @param string $name
-	 * @param callable $callback
+	 * @param mixed $resolver
 	 * @return $this
 	 */
-	public function addItemCallback($name, callable $callback)
+	public function addItemResolver($name, $resolver)
 	{
-		$this->itemCallbacks[$name] = $callback;
+		$this->itemResolvers[$name] = $resolver;
 
 		return $this;
 	}
@@ -117,8 +117,12 @@ class ArrayToEntityConverter extends Object
 				if ($fieldMetadata['type'] == ClassMetadata::MANY_TO_MANY || $fieldMetadata['type'] == ClassMetadata::ONE_TO_MANY) {
 					$value = new ArrayCollection($this->data[$field]);
 				}
-				if (array_key_exists($field, $this->itemCallbacks)) {
-					$value = $this->itemCallbacks[$field]($value);
+				if (array_key_exists($field, $this->itemResolvers)) {
+					if (is_callable($this->itemResolvers[$field])) {
+						$value = $this->itemResolvers[$field]($value);
+					} else {
+						$value = $this->itemResolvers[$field];
+					}
 				}
 				$method = $this->getMethodName($field, self::SET);
 				if (is_callable($entity, $method)) {
@@ -135,8 +139,12 @@ class ArrayToEntityConverter extends Object
 		foreach ($metadata->getFieldNames() as $field) {
 			if (array_key_exists($field, $this->data) && $this->isAllowedField($field)) {
 				$value = $this->data[$field];
-				if (array_key_exists($field, $this->itemCallbacks)) {
-					$value = $this->itemCallbacks[$field]($value);
+				if (array_key_exists($field, $this->itemResolvers)) {
+					if (is_callable($this->itemResolvers[$field])) {
+						$value = $this->itemResolvers[$field]($value);
+					} else {
+						$value = $this->itemResolvers[$field];
+					}
 				}
 				$method = $this->getMethodName($field, self::SET);
 				if (is_callable([$entity, $method])) {

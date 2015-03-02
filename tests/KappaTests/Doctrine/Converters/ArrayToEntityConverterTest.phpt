@@ -102,7 +102,7 @@ class ArrayToEntityConverterTest extends ORMTestCase
 		Assert::equal($expectedUser, $converter->convert());
 	}
 
-	public function testItemCallback()
+	public function testItemResolver()
 	{
 		$data = [
 			'name' => 'Tester',
@@ -110,8 +110,9 @@ class ArrayToEntityConverterTest extends ORMTestCase
 		];
 		$parent = new UserEntity("Joe");
 		$converter = new ArrayToEntityConverter('KappaTests\Mocks\UserEntity', $data, $this->em);
-		$converter->addItemCallback('parent', function ($name) use ($parent) {return $parent;});
-		Assert::equal(new UserEntity("Tester", null, null, $parent), $converter->convert());
+		$converter->addItemResolver('parent', function ($name) use ($parent) {return $parent;})
+			->addItemResolver('name', 'TesterResolved');
+		Assert::equal(new UserEntity("TesterResolved", null, null, $parent), $converter->convert());
 	}
 }
 

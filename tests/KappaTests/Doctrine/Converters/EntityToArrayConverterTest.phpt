@@ -92,13 +92,13 @@ class EntityToArrayConverterTest extends ORMTestCase
 		], $converter->convert());
 	}
 
-	public function testFieldCallback()
+	public function testFieldResolver()
 	{
 		$user = $this->buildEntity();
 		$converter = new EntityToArrayConverter($user, $this->em);
-		$converter->addFieldCallback('name', function ($name) { return strtoupper($name); })
-			->addFieldCallback('parent', function (UserEntity $user) { return $user->getName(); });
-		Assert::same(strtoupper($user->getName()), $converter->convert()['name']);
+		$converter->addFieldResolver('name', 'NameResolved')
+			->addFieldResolver('parent', function (UserEntity $user) { return $user->getName(); });
+		Assert::same('NameResolved', $converter->convert()['name']);
 		Assert::same($user->getParent()->getName(), $converter->convert()['parent']);
 	}
 
