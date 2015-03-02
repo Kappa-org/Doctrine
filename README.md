@@ -78,6 +78,7 @@ $entity = $converter->arrayToEntity('User', $data)
 	})
 	->convert();
 echo $entity->getName(); // print Joe
+echo $entity->getSex(); // print female
 $entity->getParent(); // returns instance of User
 ```
 
