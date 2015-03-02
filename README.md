@@ -27,6 +27,7 @@ Method `entityToArray` requires entity object and returns `Kappa\Doctrine\Conver
 
 * `setIgnoreList(array)` - set list of items which you can ignore *(ignore list and white list can be combined)*
 * `setWhiteList(array)` - set list of items which you can transform *(ignore list and white list can be combined)*
+* `addField(column name, value)` - set custom value for concrete field
 * `addFieldCallback(column name, callable)` - set custom callback for concrete field
 * `convert()` - returns generated array
 
@@ -40,7 +41,7 @@ $user->setParent(new User("Joe senior"))
 	->setPrivate("private");
 $array = $converter->entityToArray($user)
 	->setIgnoreList(["private"])
-	->addFieldCallback("age", function ($age) { return $age / 10; })
+	->addField("age", 99)
 	->addFieldCallback("parent", function(User $parent) { return $parent->getName(); })
 	->convert();
 echo $array['name']; // print Joe

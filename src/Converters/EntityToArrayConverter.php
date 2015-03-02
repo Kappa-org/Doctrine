@@ -41,6 +41,9 @@ class EntityToArrayConverter extends Object
 	/** @var array */
 	private $fieldCallbacks = [];
 
+	/** @var array */
+	private $fieldValues = [];
+
 	/**
 	 * @param object $entity
 	 * @param EntityManager $entityManager
@@ -78,6 +81,18 @@ class EntityToArrayConverter extends Object
 
 	/**
 	 * @param string $name
+	 * @param string $value
+	 * @return $this
+	 */
+	public function addField($name, $value)
+	{
+		$this->fieldValues[$name] = $value;
+
+		return $this;
+	}
+
+	/**
+	 * @param string $name
 	 * @param callable $callback
 	 * @return $this
 	 */
@@ -99,6 +114,9 @@ class EntityToArrayConverter extends Object
 		foreach($fields as $field) {
 			if ($this->isAllowedField($field)) {
 				$value = $metadata->getFieldValue($this->entity, $field);
+				if (array_key_exists($field, $this->fieldValues)) {
+					$value = $this->fieldValues[$field];
+				}
 				if (array_key_exists($field, $this->fieldCallbacks)) {
 					$value = $this->fieldCallbacks[$field]($value);
 				}
