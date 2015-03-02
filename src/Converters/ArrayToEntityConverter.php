@@ -52,6 +52,9 @@ class ArrayToEntityConverter extends Object
 	/** @var array */
 	private $itemCallbacks = [];
 
+	/** @var array */
+	private $itemValues = [];
+
 	/**
 	 * @param string|object $entity
 	 * @param array $data
@@ -93,6 +96,18 @@ class ArrayToEntityConverter extends Object
 
 	/**
 	 * @param string $name
+	 * @param string $value
+	 * @return $this
+	 */
+	public function addItem($name, $value)
+	{
+		$this->itemValues[$name] = $value;
+
+		return $this;
+	}
+
+	/**
+	 * @param string $name
 	 * @param callable $callback
 	 * @return $this
 	 */
@@ -117,6 +132,9 @@ class ArrayToEntityConverter extends Object
 				if ($fieldMetadata['type'] == ClassMetadata::MANY_TO_MANY || $fieldMetadata['type'] == ClassMetadata::ONE_TO_MANY) {
 					$value = new ArrayCollection($this->data[$field]);
 				}
+				if (array_key_exists($field, $this->itemValues)) {
+					$value = $this->itemValues[$field];
+				}
 				if (array_key_exists($field, $this->itemCallbacks)) {
 					$value = $this->itemCallbacks[$field]($value);
 				}
@@ -135,6 +153,9 @@ class ArrayToEntityConverter extends Object
 		foreach ($metadata->getFieldNames() as $field) {
 			if (array_key_exists($field, $this->data) && $this->isAllowedField($field)) {
 				$value = $this->data[$field];
+				if (array_key_exists($field, $this->itemValues)) {
+					$value = $this->itemValues[$field];
+				}
 				if (array_key_exists($field, $this->itemCallbacks)) {
 					$value = $this->itemCallbacks[$field]($value);
 				}
