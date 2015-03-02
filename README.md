@@ -70,7 +70,7 @@ $data = [
 $entity = $converter->arrayToEntity('User', $data)
 	->setIgnoreList(['private'])
 	->setWhiteList(['age', 'name', 'private'])
-	->setItemCallback('parent', function ($parent) {
+	->addItemCallback('parent', function ($parent) {
 		return $this->dao->find($parent);
 	})
 	->convert();
