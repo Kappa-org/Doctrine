@@ -114,7 +114,7 @@ class ArrayToEntityConverterTest extends ORMTestCase
 		Assert::equal(new UserEntity("Tester", null, null, $parent), $converter->convert());
 	}
 
-	public function testItem()
+	public function testItemValue()
 	{
 		$data = [
 			'name' => 'Tester',
