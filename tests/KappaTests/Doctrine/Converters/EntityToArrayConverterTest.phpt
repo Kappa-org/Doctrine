@@ -106,7 +106,7 @@ class EntityToArrayConverterTest extends ORMTestCase
 	{
 		$user = $this->buildEntity();
 		$converter = new EntityToArrayConverter($user, $this->em);
-		$converter->addField('name', $user->getName())
+		$converter->addField('name', strtoupper($user->getName()))
 			->addField('parent', $user->getParent()->getName());
 		Assert::same(strtoupper($user->getName()), $converter->convert()['name']);
 		Assert::same($user->getParent()->getName(), $converter->convert()['parent']);
