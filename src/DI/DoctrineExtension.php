@@ -40,6 +40,7 @@ class DoctrineExtension extends CompilerExtension
 		if ($config['identity']) {
 			$this->processIdentity($config['identity']);
 		}
+		$this->processRoutes();
 	}
 
 	private function processIdentity($identity)
@@ -83,5 +84,12 @@ class DoctrineExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$builder->addDefinition($this->prefix('queryExecutor'))
 			->setClass('Kappa\Doctrine\Queries\QueryExecutor');
+	}
+
+	private function processRoutes()
+	{
+		$builder = $this->getContainerBuilder();
+		$builder->addDefinition($this->prefix('routeParamsResolverFactory'))
+			->setClass('Kappa\Doctrine\Routes\RouteParamsResolverFactory');
 	}
 }

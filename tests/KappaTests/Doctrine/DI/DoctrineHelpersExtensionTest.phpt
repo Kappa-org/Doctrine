@@ -56,6 +56,12 @@ class DoctrineExtensionTest extends TestCase
 		$type = 'Kappa\Doctrine\Queries\QueryExecutor';
 		Assert::type($type, $this->container->getByType($type));
 	}
+
+	public function testRouteParamsResolverFactory()
+	{
+		$type = 'Kappa\Doctrine\Routes\RouteParamsResolverFactory';
+		Assert::type($type, $this->container->getByType($type));
+	}
 }
 
 \run(new DoctrineExtensionTest(getContainer()));
