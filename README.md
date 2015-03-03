@@ -173,3 +173,40 @@ class ExecutableQuery implements Executable
 
 $this->queryExecutor->execute(new ExecutableQuery());
 
+## RouteParamsResolver
+
+You can use `Kappa\Doctrine\Routes\RouteParamsResolver` for easy works with `FILTER_IN/OUT` in your routes
+
+**Example**
+
+```php
+<?php
+
+class Router
+{
+	private $paramsResolver;
+	
+	public function __construct(RouteParamsResolverFactory $factory)
+	{
+		$this->paramsResolver = $factory->create('App\Entities\Article');
+	}
+	
+	/**
+	 * @return \Nette\Application\IRouter
+	 */
+	public function createRouter()
+	{
+		$router = new RouteList();
+		$router[] = new Route('<presenter>/<action>[/<id>', [
+			'presenter' => 'Homepage',
+			'action' => 'default',
+			'id' => [
+				Route::FILTER_IN => [$this->paramsResolver, 'filterIn'],
+				Route::FILTER_IN => [$this->paramsResolver, 'filterOut']
+			]
+		]);
+
+		return $router;
+	}
+}
+```
