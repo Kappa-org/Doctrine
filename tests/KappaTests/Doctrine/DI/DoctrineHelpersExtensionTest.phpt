@@ -62,6 +62,12 @@ class DoctrineExtensionTest extends TestCase
 		$type = 'Kappa\Doctrine\Routes\RouteParamsResolverFactory';
 		Assert::type($type, $this->container->getByType($type));
 	}
+
+	public function testUserStorage()
+	{
+		$type = 'Nette\Security\IUserStorage';
+		Assert::type('Kappa\Doctrine\Http\UserStorage', $this->container->getByType($type));
+	}
 }
 
 \run(new DoctrineExtensionTest(getContainer()));
