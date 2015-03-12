@@ -49,8 +49,8 @@ class DoctrineExtension extends CompilerExtension
 
 		$builder->getDefinition('nette.userStorage')
 			->setClass('Kappa\Doctrine\Http\UserStorage', [
-				'...',
-				'...',
+				'@Nette\Http\Session',
+				'@Kdyby\Doctrine\EntityManager',
 				$identity
 			]);
 	}
